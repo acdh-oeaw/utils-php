@@ -1,0 +1,38 @@
+﻿<explain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://explain.z3950.org/dtd/2.0/" authoritative="false" id="id1">
+    <serverInfo protocol="SRU" version="1.2" transport="http">
+        <host>{tmpl_var name="hostid"}</host>
+        <port>80</port>
+        <database>cr</database>
+    </serverInfo>
+    {tmpl_var name='xmlinfosnippet'}
+    <indexInfo>
+        <set identifier="isocat.org/datcat" name="isocat">
+            <title>ISOcat data categories</title>
+        </set>
+        <set identifier="clarin.eu/fcs/1.0" name="fcs">
+            <title>Federated Content Search (CLARIN)</title>
+        </set>
+
+        <set identifier="clarin.eu/cmd" name="cmd">
+            <title>Component Metadata (CLARIN)</title>
+        </set>
+        <index search="true" scan="true" sort="false">
+            <title lang="en">Resource</title>
+            <map>
+                <name set="fcs">resource</name>
+
+            </map>
+        </index>
+    </indexInfo>
+    <schemaInfo>
+        <schema identifier="clarin.eu/fcs/1.0" location="" name="fcs" retrieve="true">
+            <title lang="en">Federated Content Search</title>
+        </schema>
+    </schemaInfo>
+
+    <configInfo> 
+                    <!-- should translate to x-cmd-context extension-parameter if correctly interpreted: http://explain.z3950.org/dtd/commentary.html#8 
+                    or shall we rather directly write: x-cmd-context or x-fcs-context -->
+        <supports type="extraSearchData">cmd context</supports>
+    </configInfo>
+</explain>
