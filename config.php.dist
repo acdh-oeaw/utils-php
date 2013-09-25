@@ -33,7 +33,7 @@
    * or the switch that provides a central endpoint.
    * @global string $fcsRoot
    */
-  $fcsRoot =                 $docRoot . $csRoot . 'fcs/';
+  $fcsRoot =                 $docRoot . $csRoot . 'modules/';
   
   /**
    * DB connection data configuration
