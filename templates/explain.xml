@@ -1,58 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sru:explainResponse xmlns:sru="http://www.loc.gov/zing/srw/">
-  <sru:version>1.2</sru:version>
-  <sru:record>
-    <sru:recordPacking>XML</sru:recordPacking>
-    <sru:recordSchema>http://explain.z3950.org/dtd/2.1/</sru:recordSchema>
+    <sru:version>1.2</sru:version>
+    <sru:record>
+        <sru:recordPacking>XML</sru:recordPacking>
+        <sru:recordSchema>http://explain.z3950.org/dtd/2.1/</sru:recordSchema>
 
-    <sru:recordData>
+        <sru:recordData>
 
-      <zr:explain xmlns:zr="http://explain.z3950.org/dtd/2.1/">
+            <zr:explain xmlns:zr="http://explain.z3950.org/dtd/2.1/">
 
-        <zr:serverInfo protocol="SRU" version="1.1" transport="http" method="GET">
-          <zr:host>{tmpl_var name='hostid'}</zr:host>
-          <zr:port>80</zr:port>
-          <zr:database>/ddcsru</zr:database>
-        </zr:serverInfo>
+                <zr:serverInfo protocol="SRU" version="1.1" transport="http" method="GET">
+                    <zr:host>{tmpl_var name='hostid'}</zr:host>
+                    <zr:port>80</zr:port>
+                    <zr:database>{tmpl_var name='database'}</zr:database>
+                </zr:serverInfo>
 
-        <zr:databaseInfo>
-          <title lang="en" primary="true">C4-corpus via SRU </title>
-        </zr:databaseInfo>
+                <zr:databaseInfo>
+                    <zr:title lang="en" primary="true">{tmpl_var name='databaseTitle'}</zr:title>
+                </zr:databaseInfo>
 
-<indexInfo>
-		<index search="true" sort="false">
-      <title lang="en">CQL Server Choice</title>
-      <map><name set="cql">serverChoice</name></map>
-    </index>
-    <index search="true" scan="true" sort="false">
-      <title lang="en">CQL All</title>
-      <map><name set="cql">all</name></map>
-    </index>
+                <zr:indexInfo>
+                    <zr:index search="true" sort="false">
+                        <zr:title lang="en">CQL Server Choice</zr:title>
+                        <zr:map>
+                            <zr:name set="cql">serverChoice</zr:name>
+                        </zr:map>
+                    </zr:index>
+                    <zr:index search="true" scan="true" sort="false">
+                        <zr:title lang="en">CQL All</zr:title>
+                        <zr:map>
+                            <zr:name set="cql">all</zr:name>
+                        </zr:map>
+                    </zr:index>
+                    <tmpl_loop name="maps">
+                        <zr:index search="{tmpl_var name='search'}" scan="{tmpl_var name='scan'}" sort="{tmpl_var name='sort'}">
+                        <zr:title lang="en">{tmpl_var name='title'}</zr:title>
+                        <zr:map>
+                            <zr:name set="fcs">{tmpl_var name='name'}</zr:name>
+                        </zr:map>
+                    </zr:index>
+                    </tmpl_loop>
+                </zr:indexInfo>
 
-  </indexInfo>
-
-  <schemaInfo>
-    <schema identifier="http://www.loc.gov/zing/srw/dcschema/v1.0/" location="http://www.loc.gov/zing/srw/dc.xsd" name="dc" retrieve="true">
-      <title lang="en">Dublin Core</title>
-    </schema>
-    <schema identifier="clarin.eu/schema/ccs-v1.0" location="" name="ccs" retrieve="true">
-      <title lang="en">CLARIN Content Search</title>
-    </schema>
-  </schemaInfo>
+                <zr:schemaInfo>
+                    <zr:schema identifier="http://www.loc.gov/zing/srw/dcschema/v1.0/" location="http://www.loc.gov/zing/srw/dc.xsd" name="dc" retrieve="true">
+                        <zr:title lang="en">Dublin Core</zr:title>
+                    </zr:schema>
+                    <zr:schema identifier="clarin.eu/schema/ccs-v1.0" location="" name="ccs" retrieve="true">
+                        <zr:title lang="en">CLARIN Content Search</zr:title>
+                    </zr:schema>
+                </zr:schemaInfo>
 
 
-        <zr:configInfo>
+                <zr:configInfo>
 
-          <zr:default type="numberOfRecords">10</zr:default>
-          <zr:setting type="maximumRecords">100</zr:setting>
-          <zr:setting type="resultSetTTL">100</zr:setting>
+                    <zr:default type="numberOfRecords">10</zr:default>
+                    <zr:setting type="maximumRecords">100</zr:setting>
+                    <zr:setting type="resultSetTTL">100</zr:setting>
 
-        </zr:configInfo>
+                </zr:configInfo>
 
-      </zr:explain>
+            </zr:explain>
 
-    </sru:recordData>
+        </sru:recordData>
 
-  </sru:record>
+    </sru:record>
 
 </sru:explainResponse>
