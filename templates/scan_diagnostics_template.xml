@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sru:scanResponse xmlns:sru="http://www.loc.gov/zing/srw/" >
+    <sru:version>{tmpl_var name='version'}</sru:version>
+    <sru:diagnostics>
+        <tmpl_include file='diagnostics_template.xml'/>
+    </sru:diagnostics>
+</sru:scanResponse>

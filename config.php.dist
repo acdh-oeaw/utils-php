@@ -47,7 +47,7 @@
 
   //template files
   /**
-   * Diagnostic message template file
+   * Diagnostic message template file for searchRetreive operations
    * 
    * Path to the diagnostics template which is used to convey infomation about
    * malformed requests back to the user as required by the SRU Base Profile.
@@ -56,6 +56,18 @@
    * @global string $diagnosticsTemplate
    */
   $diagnosticsTemplate =     $fcsRoot . 'utils-php/templates/sru_diagnostics_template.xml';
+  
+  /**
+   * Diagnostic message template file for scan operations
+   * 
+   * Path to the diagnostics template which is used to convey infomation about
+   * malformed requests back to the user as required by the SRU Base Profile.
+   * See also: {@link http://www.loc.gov/standards/sru/specs/base-profile.html} and
+   * {@link http://www.loc.gov/standards/sru/specs/diagnostics.html}
+   * @global string $diagnosticsTemplate
+   */
+  $scanDiagnosticsTemplate =     $fcsRoot . 'utils-php/templates/scan_diagnostics_template.xml';
+  
   /**
    * FCS Resource response template file
    * 
