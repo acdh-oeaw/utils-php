@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sru:scanResponse xmlns:sru="http://www.loc.gov/zing/srw/"
                   xmlns:diag="http://www.loc.gov/zing/srw/diagnostic/"
-                  xmlns:fcsm="http://clarin.eu/fcs/1.0">
-<!-- xmlns:fcsm -> xmlns:fcs="http://clarin.eu/fcs/1.0" -->    
+                  xmlns:fcs="http://clarin.eu/fcs/1.0">  
     <sru:version>{tmpl_var name='version'}</sru:version>
     <sru:terms>
         <tmpl_loop name='terms'>
             <sru:term>
                 <sru:value>{tmpl_var name='value'}</sru:value>
-                <sru:numberOfRecords>1+</sru:numberOfRecords>
-                <sru:displayTerm>{tmpl_var name='displayTerm'}</sru:displayTerm>
+                <sru:numberOfRecords>{tmpl_var name='numberOfRecords'}</sru:numberOfRecords>
+                <tmpl_if name='displayTerm' op='!=' value=''>
+                    <sru:displayTerm>{tmpl_var name='displayTerm'}</sru:displayTerm>
+                </tmpl_if>
                 <sru:extraTermData>
-                    <fcsm:position>{tmpl_var name='position'}</fcsm:position>
+                    <fcs:position>{tmpl_var name='position'}</fcs:position>
                 </sru:extraTermData>
             </sru:term>
         </tmpl_loop>   
     </sru:terms>
     <sru:extraResponseData>
-        <fcsm:countTerms>{tmpl_var name='count'}</fcsm:countTerms>
+        <fcs:countTerms>{tmpl_var name='count'}</fcs:countTerms>
     </sru:extraResponseData>
     <sru:echoedScanRequest>
         <sru:version>1.2</sru:version>
