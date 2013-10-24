@@ -210,4 +210,3 @@
    * @global string $ddcConfigXsl
    */
   $ddcConfigXsl =            $fcsRoot . "ddconsru/tmpl/sru_scan_fcs.resource.xsl";
-?>

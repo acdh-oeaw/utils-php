@@ -8,7 +8,9 @@
   /**
    * Loads the common configuration file
    */
-  include "config.php";
+  // Of course there is no point in using ../utils-php here. Seems to be needed so
+  // XAMPP 1.7.7 (php 5.3.8) is recognizing the file. May be unneeded, didn't investigate.
+  include_once "../utils-php/config.php";
 
   /**
    * Array containing all SRU diagnostic message texts
@@ -132,4 +134,3 @@
 
     $tmpl->pparse();
   }
-?>
