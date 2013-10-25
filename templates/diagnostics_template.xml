@@ -1,5 +1,5 @@
 <diagnostic xmlns="http://www.loc.gov/zing/srw/diagnostic/">
-    <uri>{tmpl_var name='diagnosticId'}</uri>
+    <uri>info:srw/diagnostic/1/{tmpl_var name='diagnosticId'}</uri>
     <message>{tmpl_var name='diagnosticMessage'}</message>
     <details>{tmpl_var name='diagnosticDetails'}</details>
 </diagnostic>
