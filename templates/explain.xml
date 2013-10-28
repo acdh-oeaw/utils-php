@@ -3,11 +3,11 @@
     <sru:version>1.2</sru:version>
     <sru:record>
         <sru:recordPacking>XML</sru:recordPacking>
-        <sru:recordSchema>http://explain.z3950.org/dtd/2.1/</sru:recordSchema>
+        <sru:recordSchema>http://explain.z3950.org/dtd/2.0/</sru:recordSchema>
 
         <sru:recordData>
 
-            <zr:explain xmlns:zr="http://explain.z3950.org/dtd/2.1/">
+            <zr:explain xmlns:zr="http://explain.z3950.org/dtd/2.0/">
 
                 <zr:serverInfo protocol="SRU" version="1.1" transport="http" method="GET">
                     <zr:host>{tmpl_var name='hostid'}</zr:host>
@@ -20,7 +20,7 @@
                 </zr:databaseInfo>
 
                 <zr:indexInfo>
-                    <zr:index search="true" sort="false">
+                    <zr:index search="true" scan="true" sort="false">
                         <zr:title lang="en">CQL Server Choice</zr:title>
                         <zr:map>
                             <zr:name set="cql">serverChoice</zr:name>

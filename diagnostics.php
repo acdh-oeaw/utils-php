@@ -18,7 +18,8 @@
    * Using this array error numbers can be mapped to (english) messages.
    * @global array $errorMessages
    */
-  $errorMessages = array (1   => "General system error",
+  $errorMessages = array (// General Diagnostics
+                          1   => "General system error",
                           2   => "System temporarily unavailable",
                           3   => "Authentication error",
                           4   => "Unsupported operation",
@@ -26,12 +27,16 @@
                           6   => "Unsupported parameter value",
                           7   => "Mandatory parameter not supplied",
                           8   => "Unsupported Parameter",
+                          235 => "Database does not exist",
+                          // Diagnostics Relating to CQL
                           10  => "Query syntax error",
+                          // Deprecated
                           12  => "Too many characters in query",
                           13  => "Invalid or unsupported use of parentheses",
                           14  => "Invalid or unsupported use of quotes",
                           15  => "Unsupported context set",
                           16  => "Unsupported index",
+                          // Deprecated
                           18  => "Unsupported combination of indexes",
                           19  => "Unsupported relation",
                           20  => "Unsupported relation modifier",
@@ -58,10 +63,12 @@
                           42  => "Unsupported proximity unit",
                           43  => "Unsupported proximity ordering",
                           44  => "Unsupported combination of proximity modifiers",
+                          // Deprecated
                           46  => "Unsupported boolean modifier",
                           47  => "Cannot process query; reason unknown",
                           48  => "Query feature unsupported",
                           49  => "Masking character in unsupported position",
+                          // Diagnostics Relating to Result Sets 
                           50  => "Result sets not supported",
                           51  => "Result set does not exist",
                           52  => "Result set temporarily unavailable",
@@ -70,6 +77,7 @@
                           58  => "Result set created with unpredictable partial results available",
                           59  => "Result set created with valid partial results available",
                           60  => "Result set not created: too many matching records",
+                          // Diagnostics Relating to Records,
                           61  => "First record position out of range",
                           64  => "Record temporarily unavailable",
                           65  => "Record does not exist",
@@ -82,6 +90,7 @@
                           72  => "XPath retrieval unsupported",
                           73  => "XPath expression contains unsupported feature",
                           74  => "Unable to evaluate XPath expression",
+                          // Diagnostics Relating to Sorting
                           80  => "Sort not supported",
                           82  => "Unsupported sort sequence",
                           83  => "Too many records to sort",
@@ -94,8 +103,10 @@
                           91  => "Unsupported case",
                           92  => "Unsupported missing value action",
                           93  => "Sort ended due to missing value",
+                          // Diagnostics relating to Stylesheets
                           110 => "Stylesheets not supported",
                           111 => "Unsupported stylesheet",
+                          // Diagnostics relating to Scan
                           120 => "Response position out of range",
                           121 => "Too many terms requested");
   
@@ -113,7 +124,7 @@
    * @param $diagnosticId
    * @param $diagnosticDetails
    */
-  function Diagnostics($diagnosticId, $diagnosticDetails)
+  function diagnostics($diagnosticId, $diagnosticDetails)
   {
     global $diagnosticsTemplate;
     global $version;
@@ -124,7 +135,8 @@
 
     require_once $vlibPath;
 
-    header ("content-type: text/xml; charset=UTF-8");
+//  header should be set elsewhere! 
+//    header ("content-type: text/xml; charset=UTF-8");
     $tmpl = new vlibTemplate($diagnosticsTemplate);
 
     $tmpl->setvar('version', $version);
