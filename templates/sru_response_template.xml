@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sru:searchRetrieveResponse xmlns:diag="http://www.loc.gov/zing/srw/diagnostic/" xmlns:sru="http://www.loc.gov/zing/srw/"
-                            xmlns:fcs="http://clarin.eu/fcs/1.0">
+<sru:searchRetrieveResponse
+    xmlns="http://www.tei-c.org/ns/1.0"
+    xmlns:tei="http://www.tei-c.org/ns/1.0"
+    xmlns:diag="http://www.loc.gov/zing/srw/diagnostic/"
+    xmlns:sru="http://www.loc.gov/zing/srw/"
+    xmlns:fcs="http://clarin.eu/fcs/1.0">
     <sru:version>{tmpl_var name='version'}</sru:version>
     <sru:numberOfRecords>{tmpl_var name='numberOfRecords'}</sru:numberOfRecords>
-    <echoedSearchRetrieveRequest>
-        <version>{tmpl_var name='version'}</version>
-        <query>{tmpl_var name='query'}</query>
-        <baseUrl>{tmpl_var name='baseURL'}</baseUrl>
-    </echoedSearchRetrieveRequest>
+    <sru:echoedSearchRetrieveRequest>
+        <sru:version>{tmpl_var name='version'}</sru:version>
+        <sru:query>{tmpl_var name='query'}</sru:query>
+        <fcs:x-context>{tmpl_var name='xcontext'}</fcs:x-context>
+        <fcs:x-dataview>{tmpl_var name='xdataview'}</fcs:x-dataview>
+        <sru:baseUrl>{tmpl_var name='baseURL'}</sru:baseUrl>
+    </sru:echoedSearchRetrieveRequest>
     <sru:records>
         <tmpl_loop name='hits'>
             <sru:record>
@@ -21,7 +27,7 @@
                             </tmpl_loop>
                         </fcs:DataView>
                         <fcs:ResourceFragment>
-                            <fcs:DataView type="w">
+                            <fcs:DataView type="{tmpl_var name='xdataview'}">
                                 {tmpl_var name='content'}
                             </fcs:DataView>
                         </fcs:ResourceFragment>
