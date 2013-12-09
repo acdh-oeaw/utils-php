@@ -197,13 +197,13 @@ class SRUParameters {
         }
         $query = filter_input(INPUT_GET, 'query', FILTER_UNSAFE_RAW, FILTER_FLAG_ENCODE_LOW | FILTER_FLAG_ENCODE_HIGH);
         if (isset($query)) {
-            $this->query = trim($query);
+            $this->query = html_entity_decode_numeric(trim($query));
         } else {
             $this->query = ($sruMode == "strict") ? false : "";
         }
         $scanClause = filter_input(INPUT_GET, 'scanClause', FILTER_UNSAFE_RAW, FILTER_FLAG_ENCODE_LOW | FILTER_FLAG_ENCODE_HIGH);
         if (isset($scanClause)) {
-            $this->scanClause = trim($scanClause);
+            $this->scanClause = html_entity_decode_numeric(trim($scanClause));
         } else {
             $this->scanClause = ($sruMode == "strict") ? false : "";
         }
@@ -350,7 +350,7 @@ define ("ENT_HTML401", 0);
  * @param string|array $string A string or array of strings that should be decoded into UTF-8. 
  * @param const $flags Flags used by html_entity_decode see it's documentation
  * @param string $charset Charset used by html_entity_decode. Noter: Other replcements are UTF-8 only.
- * @return string decoded HTML
+ * @return string UTF-8 encoded string.
  */
 function html_entity_decode_numeric($string, $flags = NULL, $charset = "UTF-8") {
     if (!isset($flags)) {
