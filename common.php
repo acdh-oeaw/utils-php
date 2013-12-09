@@ -339,3 +339,79 @@ class SRUWithFCSParameters extends SRUParameters {
  */
 
 $sru_fcs_params;
+
+define ("ENT_HTML401", 0);
+
+/**
+ * Decodes all HTML entities, including numeric and hexadecimal ones.
+ * 
+ * Helper function to fully decode html entities including numeric entities
+ * see http://stackoverflow.com/questions/2764781/how-to-decode-numeric-html-entities-in-php
+ * @param string|array $string A string or array of strings that should be decoded into UTF-8. 
+ * @param const $flags Flags used by html_entity_decode see it's documentation
+ * @param string $charset Charset used by html_entity_decode. Noter: Other replcements are UTF-8 only.
+ * @return string decoded HTML
+ */
+function html_entity_decode_numeric($string, $flags = NULL, $charset = "UTF-8") {
+    if (!isset($flags)) {
+        $flags = (ENT_COMPAT | ENT_HTML401);
+    }
+    $namedEntitiesDecoded = html_entity_decode($string, $flags, $charset);
+    $hexEntitiesDecoded = preg_replace_callback('~&#x([0-9a-fA-F]+);~i', "chr_utf8_callback", $namedEntitiesDecoded);
+    $decimalEntitiesDecoded = preg_replace('~&#([0-9]+);~e', 'chr_utf8("\\1")', $hexEntitiesDecoded);
+    return $decimalEntitiesDecoded;
+}
+
+/**
+ * Callback helper 
+ */
+function chr_utf8_callback($matches) {
+    return chr_utf8(hexdec($matches[1]));
+}
+
+/**
+ * Multi-byte chr(): Will turn a numeric argument into a UTF-8 string.
+ * 
+ * @param mixed $num
+ * @return string
+ */
+function chr_utf8($num) {
+    if ($num < 128) {
+        return chr($num);
+    }
+    if ($num < 2048) {
+        return chr(($num >> 6) + 192) . chr(($num & 63) + 128);
+    }
+    if ($num < 65536) {
+        return chr(($num >> 12) + 224) . chr((($num >> 6) & 63) + 128) . chr(($num & 63) + 128);
+    }
+    if ($num < 2097152) {
+        return chr(($num >> 18) + 240) . chr((($num >> 12) & 63) + 128) . chr((($num >> 6) & 63) + 128) . chr(($num & 63) + 128);
+    }
+    return '';
+}
+
+/**
+ * Converts any HTML-entities into characters
+ * 
+ * from http://php.net/manual/de/function.mb-decode-numericentity.php
+ * @param string $string One ore more characters to convert.
+ */
+ function html_decimal_numeric2utf8_character($string)
+ {
+     $convmap = array(0xFF, 0x2FFFF, 0, 0xFFFF);
+     return mb_decode_numericentity($string, $convmap, 'UTF-8');
+ }
+ 
+ /**
+  * Converts any characters into HTML-entities
+  * 
+  * from http://php.net/manual/de/function.mb-decode-numericentity.php
+  * @param string $string One or more characters to convert.
+  */
+ function utf8_character2html_decimal_numeric($string)
+ {
+     $convmap = array(0x0, 0x1F, 0, 0xFFFFFF, /*control characters, should be unused*/
+         0xFF, 0x2FFFF, 0, 0xFFFFFF, /*mb characters*/);
+     return mb_encode_numericentity($string, $convmap, 'UTF-8');
+ }
