@@ -90,7 +90,7 @@ class SRUParameters {
      * Passed as HTTP GET parameter "maximumTerms". If the parameter is missing 10 is assumed.
      * @type integer $maximumTerms
      */
-    public $maximumTerms = 10;
+    public $maximumTerms = 100;
 
     /**
      * The version of the request, and a statement by the client that it wants the response to be less than, or preferably equal to, that version
