@@ -19,9 +19,9 @@
                     <zr:title lang="en" primary="true">{tmpl_var name='databaseTitle'}</zr:title>
                     <zr:author>{tmpl_var name='databaseAuthor'}</zr:author>
                     <tmpl_if name='dbRestrictions' op='!=' value=''>
-                        <zr:restrictions>{tmpl_var name='dbRestrictions'}</zr:restrictions>
+                        <zr:restrictions lang="en">{tmpl_var name='dbRestrictions'}</zr:restrictions>
                     </tmpl_if>
-                    <zr:description>{tmpl_var name='dbDescription'}</zr:description>
+                    <zr:description lang="en">{tmpl_var name='dbDescription'}</zr:description>
                 </zr:databaseInfo>
 
                 <zr:indexInfo>
