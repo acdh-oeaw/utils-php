@@ -19,6 +19,7 @@
     </sru:terms>
     <sru:extraResponseData>
         <fcs:countTerms>{tmpl_var name='count'}</fcs:countTerms>
+        <fcs:transformedQuery>{tmpl_var name='transformedQuery'}</fcs:transformedQuery>
     </sru:extraResponseData>
     <sru:echoedScanRequest>
         <sru:version>1.2</sru:version>
