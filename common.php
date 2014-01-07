@@ -404,14 +404,16 @@ function chr_utf8($num) {
  }
  
  /**
-  * Converts any characters into HTML-entities
+  * Converts any "non-ASCII" characters into HTML-entities
   * 
+  * That is anything that is a known as a "control character" and anything
+  * above code point 127.
   * from http://php.net/manual/de/function.mb-decode-numericentity.php
   * @param string $string One or more characters to convert.
   */
  function utf8_character2html_decimal_numeric($string)
  {
      $convmap = array(0x0, 0x1F, 0, 0xFFFFFF, /*control characters, should be unused*/
-         0xFF, 0x2FFFF, 0, 0xFFFFFF, /*mb characters*/);
+         0x7F, 0x2FFFF, 0, 0xFFFFFF, /*mb characters*/);
      return mb_encode_numericentity($string, $convmap, 'UTF-8');
  }
