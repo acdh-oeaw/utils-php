@@ -105,6 +105,14 @@
    */
   $scanCollectionsTemplate = $fcsRoot . 'utils-php/templates/sru_scan_collections_template.xml';
 
+  /**
+   * Scan request response template file for a particular term
+   *
+   * See also:
+   * @global string $scanCollectionsTemplate
+   */
+  $scanTemplate = $fcsRoot . 'utils-php/templates/sru_scan_template.xml';
+  
   /** 
    * Path to the vlibTemplate engine
    * 
