@@ -11,6 +11,8 @@
   // Of course there is no point in using ../utils-php here. Seems to be needed so
   // XAMPP 1.7.7 (php 5.3.8) is recognizing the file. May be unneeded, didn't investigate.
   include_once "../utils-php/config.php";
+  
+  use clausvb\vlib\vlibTemplate;
 
   /**
    * Array containing all SRU diagnostic message texts
