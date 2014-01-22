@@ -11,6 +11,7 @@
  * @package config
  */
 
+namespace ACDH\FCSSRU;
 /**
  * Configuration options
  */
@@ -179,7 +180,12 @@ class SRUParameters {
      * @type interger | string
      */
     public $resultSetTTL = "";
-
+    
+    /**
+     * An opaque key for xdebug.
+     */
+    public $xdebugSessionStart;
+    
     /**
      * Creates a new container class for FCS and SRU parameters
      * 
@@ -251,8 +257,105 @@ class SRUParameters {
         if (isset($resultSetTTL)) {
             $this->resultSetTTL = $resultSetTTL;
         }
+        $xdebugSessionStart = filter_input(INPUT_GET, 'XDEBUG_SESSION_START', FILTER_UNSAFE_RAW);
+        if (isset($xdebugSessionStart)) {
+             $this->xdebugSessionStart = $xdebugSessionStart;
+        }
+    }
+    
+    private $url;
+
+    /**
+     * Concats $url with the given $paramName and $paramValue
+     * 
+     * @param string url The parameter part of the URL. Initially it's assumed to be just ?
+     * @param string paramName A parameter name to be added.
+     * @param string paramValue A parameter value to be added.
+     */
+    private function AddParamToUrl($paramName, $paramValue) {
+        $this->url . ($this->url == "?" ? "" : "&") . "$paramName=$paramValue";
     }
 
+    /**
+     * Concats $url with the given $paramName and $paramValue
+     * 
+     * Like this::AddParamToUrl but adds parameter checking.
+     * @param string url The parameter part of the URL. Initially it's assumed to be just ?
+     * @param string paramName A parameter name to be added.
+     * @param string paramValue A parameter value to be added.
+     */
+    private function AddParamToUrlIfNotEmpty($paramName, $paramValue) {
+        if (($paramValue !== false) && ($paramValue != "")) {
+            this::AddParamToUrl($paramName, $paramValue);
+        }
+    }
+
+  /**
+   * Generates the query url including all mandatory and optional params
+   * 
+   * @uses $operation
+   * @uses $query
+   * @uses $scanClause
+   * @uses $responsePosition
+   * @uses $maximumTerms
+   * @uses $version
+   * @uses $maximumRecords
+   * @uses $startRecord
+   * @uses $recordPacking
+   * @uses $recordSchema
+   * @uses $resultSetTTL
+   * @uses $stylesheet
+   * @uses $extraRequestData
+   * @uses $xformat
+   * @uses $xdataview
+   * @param string $endPoint The (upstream) endpoint for the query URL
+   * @param string $xcontext The x-context for the query URL
+   * @param string type If "fcs.resource" or "fcs" x-context is used else ignored.
+   * @return string A URL string that can be used to execute the query.
+   */
+  public function GetQueryUrl($endPoint, $type = null)
+  {
+    $this->url = "?";
+
+    //mandatory params for all operations
+    this::AddParamToUrl("operation", $this->operation);
+    this::AddParamToUrl("version", $this->version);
+
+    //optional params for all operations
+    this::AddParamToUrlIfNotEmpty("stylesheet", $this->stylesheet);
+    this::AddParamToUrlIfNotEmpty("extraRequestData", $this->extraRequestData);
+    //pass on XDEBUG_SESSION_START
+    this::AddParamToUrlIfNotEmpty("XDEBUG_SESSION_START", $this->xdebugSessionStart);
+
+    switch ($this->operation)
+    {
+      case "explain":
+        //optional
+        this::AddParamToUrlIfNotEmpty("recordPacking", $this->recordPacking);
+        return $endPoint . $this->url;
+      case "scan":
+        //mandatory
+        this::AddParamToUrl("scanClause", $this->scanClause);
+        //optional
+        this::AddParamToUrlIfNotEmpty("responsePosition", $this->responsePosition);
+        this::AddParamToUrlIfNotEmpty("maximumTerms", $this->maximumTerms);
+        return $endPoint . $this->url;
+      case "searchRetrieve":
+        //mandatory
+        this::AddParamToUrl("query", $this->query);
+        //optional
+        this::AddParamToUrlIfNotEmpty("startRecord", $this->startRecord);
+        this::AddParamToUrlIfNotEmpty("maximumRecords", $this->maximumRecords);
+        this::AddParamToUrlIfNotEmpty("recordPacking", $this->recordPacking);
+        this::AddParamToUrlIfNotEmpty("recordSchema", $this->recordSchema);
+        this::AddParamToUrlIfNotEmpty("resultSetTTL", $this->resultSetTTL);
+        return $endPoint . $this->url;
+      default:
+        //"Unsupported parameter value"
+        diagnostics(6, "operation: '$this->operation'");
+      break;
+    }
+  }
 }
 
 /**
@@ -328,6 +431,37 @@ class SRUWithFCSParameters extends SRUParameters {
         $this->context = explode(",", $this->xcontext);
     }
 
+  /**
+   * Generates the query url including all mandatory and optional params
+   * 
+   * @uses $xcontext
+   * @uses $xformat
+   * @uses $xdataview
+   * @param string $endPoint The (upstream) endpoint for the query URL
+   * @param string $xcontext The x-context for the query URL
+   * @param string type If "fcs.resource" or "fcs" x-context is used else ignored.
+   * @return string A URL string that can be used to execute the query.
+   */
+    public function GetQueryUrl($endPoint, $type = null) {  
+    switch ($this->operation) {
+            case "explain":
+            case "scan":
+            case "searchRetrieve":
+                parent::GetQueryUrl($endPoint);
+                if (($type === "fcs.resource") || ($type === "fcs")) {
+                    this::AddParamToUrl($this->url, "x-context", $this->xcontext);
+                }
+                this::AddParamToUrlIfNotEmpty("x-dataview", $this->xdataview);
+                if (stripos($this->xformat, "html") === false) {
+                    this::AddParamToUrlIfNotEmpty("x-format", $this->xformat);
+                }
+                return $endPoint . $this->url;
+            default:
+                //"Unsupported parameter value"
+                diagnostics(6, "operation: '$this->operation'");
+                break;
+        }
+    }
 }
 
 /**
@@ -357,7 +491,7 @@ function html_entity_decode_numeric($string, $flags = NULL, $charset = "UTF-8") 
         $flags = (ENT_COMPAT | ENT_HTML401);
     }
     $namedEntitiesDecoded = html_entity_decode($string, $flags, $charset);
-    $hexEntitiesDecoded = preg_replace_callback('~&#x([0-9a-fA-F]+);~i', "chr_utf8_callback", $namedEntitiesDecoded);
+    $hexEntitiesDecoded = preg_replace_callback('~&#x([0-9a-fA-F]+);~i', "\\ACDH\\FCSSRU\\chr_utf8_callback", $namedEntitiesDecoded);
     $decimalEntitiesDecoded = preg_replace('~&#([0-9]+);~e', 'chr_utf8("\\1")', $hexEntitiesDecoded);
     return $decimalEntitiesDecoded;
 }
@@ -417,3 +551,29 @@ function chr_utf8($num) {
          0x7F, 0x2FFFF, 0, 0xFFFFFF, /*mb characters*/);
      return mb_encode_numericentity($string, $convmap, 'UTF-8');
  }
+ 
+ /**
+  * Initializes the global object holding the parameters and switches off the
+  * header declaration of xml on request. (TODO discuss ???)
+  * @param string mode Chack parameter "strict" or use "lax" checking.
+  * switch uses the strict mode.  
+  * @uses $sru_fcs_params
+  */
+function getParamsAndSetUpHeader($mode = "lax") {
+    global $sru_fcs_params;
+    
+    $sru_fcs_params = new SRUWithFCSParameters($mode);
+// TODO: what's this for ???
+    $sru_fcs_params->query = str_replace("|", "#", $sru_fcs_params->query);
+    if ($sru_fcs_params->recordPacking === "") {
+        $sru_fcs_params->recordPacking = "xml";
+    }
+// TODO: why ... ???
+    if ($sru_fcs_params->recordPacking !== "xml") {
+        $sru_fcs_params->recordPacking = "raw";
+    }
+
+    if ($sru_fcs_params->recordPacking === "xml") {
+        header("content-type: text/xml");
+    }
+}

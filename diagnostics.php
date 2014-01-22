@@ -5,6 +5,8 @@
  * @package config
  */
 
+ namespace ACDH\FCSSRU;
+ 
   /**
    * Loads the common configuration file
    */
