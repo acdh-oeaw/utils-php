@@ -1,5 +1,6 @@
 <?php
-/** 
+
+/**
  * Common functions used by all the scripts using the mysql database.
  * 
  * @uses $operation
@@ -12,6 +13,7 @@
  */
 
 namespace ACDH\FCSSRU;
+
 /**
  * Configuration options
  */
@@ -26,7 +28,6 @@ require_once '../utils-php/diagnostics.php';
  * vLib templating engine
  */
 require_once $vlibPath;
-
 
 /**
  * Container class for parameters described by the SRU interface 
@@ -180,12 +181,12 @@ class SRUParameters {
      * @type interger | string
      */
     public $resultSetTTL = "";
-    
+
     /**
      * An opaque key for xdebug.
      */
     public $xdebugSessionStart;
-    
+
     /**
      * Creates a new container class for FCS and SRU parameters
      * 
@@ -259,10 +260,10 @@ class SRUParameters {
         }
         $xdebugSessionStart = filter_input(INPUT_GET, 'XDEBUG_SESSION_START', FILTER_UNSAFE_RAW);
         if (isset($xdebugSessionStart)) {
-             $this->xdebugSessionStart = $xdebugSessionStart;
+            $this->xdebugSessionStart = $xdebugSessionStart;
         }
     }
-    
+
     private $url;
 
     /**
@@ -272,90 +273,103 @@ class SRUParameters {
      * @param string paramName A parameter name to be added.
      * @param string paramValue A parameter value to be added.
      */
-    private function AddParamToUrl($paramName, $paramValue) {
+    private function addParamToUrl($paramName, $paramValue) {
         $this->url . ($this->url == "?" ? "" : "&") . "$paramName=$paramValue";
     }
 
     /**
      * Concats $url with the given $paramName and $paramValue
      * 
-     * Like this::AddParamToUrl but adds parameter checking.
+     * Like $this->AddParamToUrl but adds parameter checking.
      * @param string url The parameter part of the URL. Initially it's assumed to be just ?
      * @param string paramName A parameter name to be added.
      * @param string paramValue A parameter value to be added.
      */
-    private function AddParamToUrlIfNotEmpty($paramName, $paramValue) {
+    private function addParamToUrlIfNotEmpty($paramName, $paramValue) {
         if (($paramValue !== false) && ($paramValue != "")) {
-            this::AddParamToUrl($paramName, $paramValue);
+            $this->addParamToUrl($paramName, $paramValue);
         }
     }
 
-  /**
-   * Generates the query url including all mandatory and optional params
-   * 
-   * @uses $operation
-   * @uses $query
-   * @uses $scanClause
-   * @uses $responsePosition
-   * @uses $maximumTerms
-   * @uses $version
-   * @uses $maximumRecords
-   * @uses $startRecord
-   * @uses $recordPacking
-   * @uses $recordSchema
-   * @uses $resultSetTTL
-   * @uses $stylesheet
-   * @uses $extraRequestData
-   * @uses $xformat
-   * @uses $xdataview
-   * @param string $endPoint The (upstream) endpoint for the query URL
-   * @param string $xcontext The x-context for the query URL
-   * @param string type If "fcs.resource" or "fcs" x-context is used else ignored.
-   * @return string A URL string that can be used to execute the query.
-   */
-  public function GetQueryUrl($endPoint, $type = null)
-  {
-    $this->url = "?";
+    /**
+     * Generates the query url including all mandatory and optional params
+     * 
+     * @uses $operation
+     * @uses $query
+     * @uses $scanClause
+     * @uses $responsePosition
+     * @uses $maximumTerms
+     * @uses $version
+     * @uses $maximumRecords
+     * @uses $startRecord
+     * @uses $recordPacking
+     * @uses $recordSchema
+     * @uses $resultSetTTL
+     * @uses $stylesheet
+     * @uses $extraRequestData
+     * @uses $xformat
+     * @uses $xdataview
+     * @param string $endPoint The (upstream) endpoint for the query URL
+     * @param string $xcontext The x-context for the query URL
+     * @param string type If "fcs.resource" or "fcs" x-context is used else ignored.
+     * @return string A URL string that can be used to execute the query.
+     */
+    public function getQueryUrl($endPoint, $type = null) {
+        $this->url = "?";
 
-    //mandatory params for all operations
-    this::AddParamToUrl("operation", $this->operation);
-    this::AddParamToUrl("version", $this->version);
+        //mandatory params for all operations
+        $this->addParamToUrl("operation", $this->operation);
+        $this->addParamToUrl("version", $this->version);
 
-    //optional params for all operations
-    this::AddParamToUrlIfNotEmpty("stylesheet", $this->stylesheet);
-    this::AddParamToUrlIfNotEmpty("extraRequestData", $this->extraRequestData);
-    //pass on XDEBUG_SESSION_START
-    this::AddParamToUrlIfNotEmpty("XDEBUG_SESSION_START", $this->xdebugSessionStart);
+        //optional params for all operations
+        $this->addParamToUrlIfNotEmpty("stylesheet", $this->stylesheet);
+        $this->addParamToUrlIfNotEmpty("extraRequestData", $this->extraRequestData);
+        //pass on XDEBUG_SESSION_START
+        $this->addParamToUrlIfNotEmpty("XDEBUG_SESSION_START", $this->xdebugSessionStart);
 
-    switch ($this->operation)
-    {
-      case "explain":
-        //optional
-        this::AddParamToUrlIfNotEmpty("recordPacking", $this->recordPacking);
-        return $endPoint . $this->url;
-      case "scan":
-        //mandatory
-        this::AddParamToUrl("scanClause", $this->scanClause);
-        //optional
-        this::AddParamToUrlIfNotEmpty("responsePosition", $this->responsePosition);
-        this::AddParamToUrlIfNotEmpty("maximumTerms", $this->maximumTerms);
-        return $endPoint . $this->url;
-      case "searchRetrieve":
-        //mandatory
-        this::AddParamToUrl("query", $this->query);
-        //optional
-        this::AddParamToUrlIfNotEmpty("startRecord", $this->startRecord);
-        this::AddParamToUrlIfNotEmpty("maximumRecords", $this->maximumRecords);
-        this::AddParamToUrlIfNotEmpty("recordPacking", $this->recordPacking);
-        this::AddParamToUrlIfNotEmpty("recordSchema", $this->recordSchema);
-        this::AddParamToUrlIfNotEmpty("resultSetTTL", $this->resultSetTTL);
-        return $endPoint . $this->url;
-      default:
-        //"Unsupported parameter value"
-        diagnostics(6, "operation: '$this->operation'");
-      break;
+        switch ($this->operation) {
+            case "explain":
+                //optional
+                $this->addParamToUrlIfNotEmpty("recordPacking", $this->recordPacking);
+                return $endPoint . $this->url;
+            case "scan":
+                //mandatory
+                $this->addParamToUrl("scanClause", $this->scanClause);
+                //optional
+                $this->addParamToUrlIfNotEmpty("responsePosition", $this->responsePosition);
+                $this->addParamToUrlIfNotEmpty("maximumTerms", $this->maximumTerms);
+                return $endPoint . $this->url;
+            case "searchRetrieve":
+                //mandatory
+                $this->addParamToUrl("query", $this->query);
+                //optional
+                $this->addParamToUrlIfNotEmpty("startRecord", $this->startRecord);
+                $this->addParamToUrlIfNotEmpty("maximumRecords", $this->maximumRecords);
+                $this->addParamToUrlIfNotEmpty("recordPacking", $this->recordPacking);
+                $this->addParamToUrlIfNotEmpty("recordSchema", $this->recordSchema);
+                $this->addParamToUrlIfNotEmpty("resultSetTTL", $this->resultSetTTL);
+                return $endPoint . $this->url;
+            default:
+                //"Unsupported parameter value"
+                diagnostics(6, "operation: '$this->operation'");
+                break;
+        }
     }
-  }
+
+    /**
+     * Pass parameters represented by this object into an XsltProcessor
+     * 
+     * @param XsltProcessor $proc The processor the parameters should be passed to
+     */
+    public function passParametersToXSLTProcessor($proc) {
+        $proc->setParameter('', 'format', $this->xformat);
+        $proc->setParameter('', 'operation', $this->operation);
+        $proc->setParameter('', 'x-context', $this->xcontext);
+        $proc->setParameter('', 'startRecord', $this->startRecord);
+        $proc->setParameter('', 'maximumRecords', $this->maximumRecords);
+        $proc->setParameter('', 'scanClause', $this->scanClause);
+        $proc->setParameter('', 'q', $this->query);
+    }
 }
 
 /**
@@ -431,29 +445,29 @@ class SRUWithFCSParameters extends SRUParameters {
         $this->context = explode(",", $this->xcontext);
     }
 
-  /**
-   * Generates the query url including all mandatory and optional params
-   * 
-   * @uses $xcontext
-   * @uses $xformat
-   * @uses $xdataview
-   * @param string $endPoint The (upstream) endpoint for the query URL
-   * @param string $xcontext The x-context for the query URL
-   * @param string type If "fcs.resource" or "fcs" x-context is used else ignored.
-   * @return string A URL string that can be used to execute the query.
-   */
-    public function GetQueryUrl($endPoint, $type = null) {  
-    switch ($this->operation) {
+    /**
+     * Generates the query url including all mandatory and optional params
+     * 
+     * @uses $xcontext
+     * @uses $xformat
+     * @uses $xdataview
+     * @param string $endPoint The (upstream) endpoint for the query URL
+     * @param string $xcontext The x-context for the query URL
+     * @param string type If "fcs.resource" or "fcs" x-context is used else ignored.
+     * @return string A URL string that can be used to execute the query.
+     */
+    public function getQueryUrl($endPoint, $type = null) {
+        switch ($this->operation) {
             case "explain":
             case "scan":
             case "searchRetrieve":
-                parent::GetQueryUrl($endPoint);
+                parent::getQueryUrl($endPoint);
                 if (($type === "fcs.resource") || ($type === "fcs")) {
-                    this::AddParamToUrl($this->url, "x-context", $this->xcontext);
+                    $this->addParamToUrl($this->url, "x-context", $this->xcontext);
                 }
-                this::AddParamToUrlIfNotEmpty("x-dataview", $this->xdataview);
+                $this->addParamToUrlIfNotEmpty("x-dataview", $this->xdataview);
                 if (stripos($this->xformat, "html") === false) {
-                    this::AddParamToUrlIfNotEmpty("x-format", $this->xformat);
+                    $this->addParamToUrlIfNotEmpty("x-format", $this->xformat);
                 }
                 return $endPoint . $this->url;
             default:
@@ -462,6 +476,7 @@ class SRUWithFCSParameters extends SRUParameters {
                 break;
         }
     }
+
 }
 
 /**
@@ -471,10 +486,9 @@ class SRUWithFCSParameters extends SRUParameters {
  * 
  * @global SRUWithFCSParameters $sru_fcs_params;
  */
-
 $sru_fcs_params;
 
-define ("ENT_HTML401", 0);
+define("ENT_HTML401", 0);
 
 /**
  * Decodes all HTML entities, including numeric and hexadecimal ones.
@@ -531,37 +545,35 @@ function chr_utf8($num) {
  * from http://php.net/manual/de/function.mb-decode-numericentity.php
  * @param string $string One ore more characters to convert.
  */
- function html_decimal_numeric2utf8_character($string)
- {
-     $convmap = array(0xFF, 0x2FFFF, 0, 0xFFFF);
-     return mb_decode_numericentity($string, $convmap, 'UTF-8');
- }
- 
- /**
-  * Converts any "non-ASCII" characters into HTML-entities
-  * 
-  * That is anything that is a known as a "control character" and anything
-  * above code point 127.
-  * from http://php.net/manual/de/function.mb-decode-numericentity.php
-  * @param string $string One or more characters to convert.
-  */
- function utf8_character2html_decimal_numeric($string)
- {
-     $convmap = array(0x0, 0x1F, 0, 0xFFFFFF, /*control characters, should be unused*/
-         0x7F, 0x2FFFF, 0, 0xFFFFFF, /*mb characters*/);
-     return mb_encode_numericentity($string, $convmap, 'UTF-8');
- }
- 
- /**
-  * Initializes the global object holding the parameters and switches off the
-  * header declaration of xml on request. (TODO discuss ???)
-  * @param string mode Chack parameter "strict" or use "lax" checking.
-  * switch uses the strict mode.  
-  * @uses $sru_fcs_params
-  */
+function html_decimal_numeric2utf8_character($string) {
+    $convmap = array(0xFF, 0x2FFFF, 0, 0xFFFF);
+    return mb_decode_numericentity($string, $convmap, 'UTF-8');
+}
+
+/**
+ * Converts any "non-ASCII" characters into HTML-entities
+ * 
+ * That is anything that is a known as a "control character" and anything
+ * above code point 127.
+ * from http://php.net/manual/de/function.mb-decode-numericentity.php
+ * @param string $string One or more characters to convert.
+ */
+function utf8_character2html_decimal_numeric($string) {
+    $convmap = array(0x0, 0x1F, 0, 0xFFFFFF, /* control characters, should be unused */
+        0x7F, 0x2FFFF, 0, 0xFFFFFF, /* mb characters */);
+    return mb_encode_numericentity($string, $convmap, 'UTF-8');
+}
+
+/**
+ * Initializes the global object holding the parameters and switches off the
+ * header declaration of xml on request. (TODO discuss ???)
+ * @param string mode Chack parameter "strict" or use "lax" checking.
+ * switch uses the strict mode.  
+ * @uses $sru_fcs_params
+ */
 function getParamsAndSetUpHeader($mode = "lax") {
     global $sru_fcs_params;
-    
+
     $sru_fcs_params = new SRUWithFCSParameters($mode);
 // TODO: what's this for ???
     $sru_fcs_params->query = str_replace("|", "#", $sru_fcs_params->query);

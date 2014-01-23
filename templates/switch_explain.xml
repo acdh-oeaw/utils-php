@@ -1,38 +1,38 @@
-﻿<explain xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://explain.z3950.org/dtd/2.0/" authoritative="false" id="id1">
-    <serverInfo protocol="SRU" version="1.2" transport="http">
-        <host>{tmpl_var name="hostid"}</host>
-        <port>80</port>
-        <database>cr</database>
-    </serverInfo>
+<?xml version="1.0" encoding="UTF-8"?>
+<zr:explain xmlns:zr="http://explain.z3950.org/dtd/2.0/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://explain.z3950.org/dtd/2.0/" authoritative="false" id="id1">
+    <zr:serverInfo protocol="SRU" version="1.2" transport="http">
+        <zr:host>{tmpl_var name="hostid"}</zr:host>
+        <zr:port>80</zr:port>
+        <zr:database>cr</zr:database>
+    </zr:serverInfo>
     {tmpl_var name='xmlinfosnippet'}
-    <indexInfo>
-        <set identifier="isocat.org/datcat" name="isocat">
-            <title>ISOcat data categories</title>
-        </set>
-        <set identifier="clarin.eu/fcs/1.0" name="fcs">
-            <title>Federated Content Search (CLARIN)</title>
-        </set>
+    <zr:indexInfo>
+        <zr:set identifier="isocat.org/datcat" name="isocat">
+            <zr:title>ISOcat data categories</zr:title>
+        </zr:set>
+        <zr:set identifier="clarin.eu/fcs/1.0" name="fcs">
+            <zr:title>Federated Content Search (CLARIN)</zr:title>
+        </zr:set>
 
-        <set identifier="clarin.eu/cmd" name="cmd">
-            <title>Component Metadata (CLARIN)</title>
-        </set>
-        <index search="true" scan="true" sort="false">
-            <title lang="en">Resource</title>
-            <map>
-                <name set="fcs">resource</name>
+        <zr:set identifier="clarin.eu/cmd" name="cmd">
+            <zr:title>Component Metadata (CLARIN)</zr:title>
+        </zr:set>
+        <zr:index search="true" scan="true" sort="false">
+            <zr:title lang="en">Resource</zr:title>
+            <zr:map>
+                <zr:name set="fcs">resource</zr:name>
+            </zr:map>
+        </zr:index>
+    </zr:indexInfo>
+    <zr:schemaInfo>
+        <zr:schema identifier="clarin.eu/fcs/1.0" location="" name="fcs" retrieve="true">
+            <zr:title lang="en">Federated Content Search</zr:title>
+        </zr:schema>
+    </zr:schemaInfo>
 
-            </map>
-        </index>
-    </indexInfo>
-    <schemaInfo>
-        <schema identifier="clarin.eu/fcs/1.0" location="" name="fcs" retrieve="true">
-            <title lang="en">Federated Content Search</title>
-        </schema>
-    </schemaInfo>
-
-    <configInfo> 
+    <zr:configInfo> 
                     <!-- should translate to x-cmd-context extension-parameter if correctly interpreted: http://explain.z3950.org/dtd/commentary.html#8 
                     or shall we rather directly write: x-cmd-context or x-fcs-context -->
-        <supports type="extraSearchData">cmd context</supports>
-    </configInfo>
-</explain>
+        <zr:supports type="extraSearchData">cmd context</zr:supports>
+    </zr:configInfo>
+</zr:explain>
