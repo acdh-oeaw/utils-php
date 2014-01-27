@@ -369,6 +369,7 @@ class SRUParameters {
         $proc->setParameter('', 'maximumRecords', $this->maximumRecords);
         $proc->setParameter('', 'scanClause', $this->scanClause);
         $proc->setParameter('', 'q', $this->query);
+        $proc->setParameter('', 'XDEBUG_SESSION_START', $this->xdebugSessionStart);
     }
 }
 
@@ -433,6 +434,10 @@ class SRUWithFCSParameters extends SRUParameters {
         $xcontext2 = filter_input(INPUT_GET, 'x-cmd-context', FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
         if (($this->xcontext === "") && isset($xcontext2)) {
             $this->xcontext = $xcontext2;
+        }
+        /* default for displaying something nice if no parameters are set so it's likely a human trying to use a switch URL */
+        if ($this->operation === false && $this->version === false) {
+            $this->xformat = "htmlpagetable";
         }
         $xformat = filter_input(INPUT_GET, 'x-format', FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
         if (isset($xformat)) {
