@@ -25,18 +25,9 @@
                 </zr:databaseInfo>
 
                 <zr:indexInfo>
-                    <zr:index search="true" scan="true" sort="false">
-                        <zr:title lang="en">CQL Server Choice</zr:title>
-                        <zr:map>
-                            <zr:name set="cql">serverChoice</zr:name>
-                        </zr:map>
-                    </zr:index>
-                    <zr:index search="true" scan="true" sort="false">
-                        <zr:title lang="en">CQL All</zr:title>
-                        <zr:map>
-                            <zr:name set="cql">all</zr:name>
-                        </zr:map>
-                    </zr:index>
+                    <zr:set identifier="clarin.eu/fcs" name="fcs">
+                        <zr:title>CLARIN - Federated Content Search</zr:title>
+                    </zr:set>
                     <tmpl_loop name="maps">
                         <zr:index search="{tmpl_var name='search'}" scan="{tmpl_var name='scan'}" sort="{tmpl_var name='sort'}">
                         <zr:title lang="en">{tmpl_var name='title'}</zr:title>
@@ -45,6 +36,18 @@
                         </zr:map>
                     </zr:index>
                     </tmpl_loop>
+                    <zr:index search="true" scan="true" sort="false">
+                        <zr:title lang="en">cql.serverChoice</zr:title>
+                        <zr:map>
+                            <zr:name set="cql">cql.serverChoice</zr:name>
+                        </zr:map>
+                    </zr:index>
+<!--                    <zr:index search="true" scan="true" sort="false">
+                        <zr:title lang="en">CQL All</zr:title>
+                        <zr:map>
+                            <zr:name set="cql">all</zr:name>
+                        </zr:map>
+                    </zr:index>-->
                 </zr:indexInfo>
 
                 <zr:schemaInfo>

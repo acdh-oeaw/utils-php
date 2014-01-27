@@ -13,14 +13,13 @@
         <zr:set identifier="clarin.eu/fcs/1.0" name="fcs">
             <zr:title>Federated Content Search (CLARIN)</zr:title>
         </zr:set>
-
         <zr:set identifier="clarin.eu/cmd" name="cmd">
             <zr:title>Component Metadata (CLARIN)</zr:title>
         </zr:set>
         <zr:index search="true" scan="true" sort="false">
-            <zr:title lang="en">Resource</zr:title>
+            <zr:title lang="en">fcs.resource</zr:title>
             <zr:map>
-                <zr:name set="fcs">resource</zr:name>
+                <zr:name set="fcs">fcs.resource</zr:name>
             </zr:map>
         </zr:index>
     </zr:indexInfo>
