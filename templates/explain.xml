@@ -17,11 +17,11 @@
 
                 <zr:databaseInfo>
                     <zr:title lang="en" primary="true">{tmpl_var name='databaseTitle'}</zr:title>
+                    <zr:description>{tmpl_var name='dbDescription'}</zr:description>
                     <zr:author>{tmpl_var name='databaseAuthor'}</zr:author>
                     <tmpl_if name='dbRestrictions' op='!=' value=''>
                         <zr:restrictions lang="en">{tmpl_var name='dbRestrictions'}</zr:restrictions>
                     </tmpl_if>
-                    <zr:description lang="en">{tmpl_var name='dbDescription'}</zr:description>
                 </zr:databaseInfo>
 
                 <zr:indexInfo>
