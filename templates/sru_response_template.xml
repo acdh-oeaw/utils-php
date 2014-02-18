@@ -44,7 +44,7 @@
                                         {tmpl_var name='title'}
                                     </fcs:DataView>
                                 </tmpl_if>                               
-                                <fcs:DataView type="{tmpl_var name='xdataview'}">
+                                <fcs:DataView type="full">
                                     {tmpl_var name='content'}
                                 </fcs:DataView>
                             </fcs:ResourceFragment>
