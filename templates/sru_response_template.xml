@@ -28,12 +28,22 @@
                     <sru:recordPacking>{tmpl_var name='recordPacking'}</sru:recordPacking>
                     <sru:recordData>
                         <fcs:Resource>
-                            <fcs:DataView type="metadata">
-                                <tmpl_loop name='hitsMetaData'>
-                                    <fcs:f key="{tmpl_var name='key'}" >{tmpl_var name='value'}</fcs:f>
-                                </tmpl_loop>
-                            </fcs:DataView>
+                            <tmpl_if name='wantMetadata' op='==' value='true'>
+                                <fcs:DataView type="metadata">
+                                    <tmpl_if name='hitsTeiHeader'>
+                                        {tmpl_var name='hitsTeiHeader'}
+                                    </tmpl_if>
+                                    <tmpl_loop name='hitsMetaData'>
+                                        <fcs:f key="{tmpl_var name='key'}" >{tmpl_var name='value'}</fcs:f>
+                                    </tmpl_loop>
+                                </fcs:DataView>
+                            </tmpl_if>
                             <fcs:ResourceFragment>
+                                <tmpl_if name='wantTitle' op='==' value='true'>
+                                    <fcs:DataView type="title">
+                                        {tmpl_var name='title'}
+                                    </fcs:DataView>
+                                </tmpl_if>                               
                                 <fcs:DataView type="{tmpl_var name='xdataview'}">
                                     {tmpl_var name='content'}
                                 </fcs:DataView>
