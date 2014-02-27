@@ -44,10 +44,13 @@
    * @global string $dbConfigFile
    */
   $dbConfigFile =            $docRoot . 'sru/dbconfig.php';
-
+  
+  //ACDH's corpus3
+  $corpus3Root =             "http://corpus3.aac.ac.at/cs2/corpus_shell/modules/";
+  
   //template files
   /**
-   * Diagnostic message template file for searchRetreive operations
+   * Diagnostic message template file for searchRetrieve operations
    * 
    * Path to the diagnostics template which is used to convey infomation about
    * malformed requests back to the user as required by the SRU Base Profile.
@@ -107,9 +110,9 @@
 
   /**
    * Scan request response template file for a particular term
-   *
+   * 
    * See also:
-   * @global string $scanCollectionsTemplate
+   * @global string $scanTemplate
    */
   $scanTemplate = $fcsRoot . 'utils-php/templates/sru_scan_template.xml';
   
@@ -168,8 +171,8 @@
    * Web location of corpus_shells JavaScript and CSS scripts as seen from the browsers perspective.
    * Has to end in a path separator (/)!
    * 
-   * See: {@link http://localhost/corpus_shell/docs/xsltdocs/result2view_v14.html#P_scripts_urlS_..params.xsl XSLT docs}
-   *  
+   * See: {@link http://simar0at.github.io/corpus_shell/xsltdocs/result2view_v14.html#P_scripts_urlS_..params.xsl XSLT docs}
+   * 
    * @global string $scriptsUrl
    */
   $scriptsUrl =              $webRoot . "scripts/";
@@ -200,21 +203,65 @@
    */
   $userdataPath =            $fcsRoot . "userdata/data/";
   
+  // get these from ACDH's server
   /**
    * Configuration for the ddc gateway scripts
    * 
    * @global string $ddcConfig
    */
-  $ddcConfig =               $fcsRoot . "ddconsru/ddc.config";
+  $ddcConfig =               $corpus3Root . "ddconsru/ddc.config";
   /**
    * XML resource description for resources reached via ddc
    * 
    * @global string $ddcConfigXml
    */
-  $ddcConfigXml =            $fcsRoot . "ddconsru/tmpl/sru_scan_fcs.resource.xml";
+  $ddcConfigXml =            $corpus3Root . "ddconsru/tmpl/sru_scan_fcs.resource.xml";
   /**
    * XSL for resource description for resources reached via ddc
    * 
    * @global string $ddcConfigXsl
    */
-  $ddcConfigXsl =            $fcsRoot . "ddconsru/tmpl/sru_scan_fcs.resource.xsl";
+  $ddcConfigXsl =            $corpus3Root . "ddconsru/tmpl/sru_scan_fcs.resource.xsl";
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//// Private data for the mysqlonsru scripts. Not to be ever shared ...                                         /////
+//// We recommend to split this and store it elsewhere.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  /**
+   * Mysql server for VICAV data
+   * 
+   * Note: This settings reside in $dbconfig which should be private!
+   * 
+   * @global string $server
+   */ 
+   
+   $server =                'ip address';
+   
+  /**
+   * Password for the mysql server hosting VICAV data
+   * 
+   * Note: This settings reside in $dbconfig which should be private!
+   * 
+   * @global string $password
+   */
+   $password =              'supersecret';
+   
+   /**
+    * User acessing the mysql server hosting VICAV data
+    * 
+    * Note: This settings reside in $dbconfig which should be private!
+    * 
+    * @global string $user
+    */
+   $user =                  'a user';
+   
+   /**
+    * Name of the database in mysql hosting VICAV data
+    * 
+    * Note: This settings reside in $dbconfig which should be private!
+    * 
+    * @global string $database
+    */
+   $database =              'a database';
+   
