@@ -511,7 +511,7 @@ function html_entity_decode_numeric($string, $flags = NULL, $charset = "UTF-8") 
     }
     $namedEntitiesDecoded = html_entity_decode($string, $flags, $charset);
     $hexEntitiesDecoded = preg_replace_callback('~&#x([0-9a-fA-F]+);~i', "\\ACDH\\FCSSRU\\chr_utf8_callback", $namedEntitiesDecoded);
-    $decimalEntitiesDecoded = preg_replace('~&#([0-9]+);~e', 'chr_utf8("\\1")', $hexEntitiesDecoded);
+    $decimalEntitiesDecoded = preg_replace('~&#([0-9]+);~e', '\\ACDH\\FCSSRU\\chr_utf8("\\1")', $hexEntitiesDecoded);
     return $decimalEntitiesDecoded;
 }
 
