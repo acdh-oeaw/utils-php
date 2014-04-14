@@ -363,7 +363,11 @@ class SRUParameters {
      */
     public function passParametersToXSLTProcessor($proc) {
         $proc->setParameter('', 'format', $this->xformat);
-        $proc->setParameter('', 'operation', $this->operation);
+        if (isset($this->operation) && ($this->operation !== false)) {
+            $proc->setParameter('', 'operation', $this->operation);
+        } else {
+            $proc->setParameter('', 'operation', 'explain');
+        }
         $proc->setParameter('', 'x-context', $this->xcontext);
         $proc->setParameter('', 'startRecord', $this->startRecord);
         $proc->setParameter('', 'maximumRecords', $this->maximumRecords);
