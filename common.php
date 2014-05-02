@@ -202,15 +202,18 @@ class SRUParameters {
         } else {
             $this->operation = ($sruMode == "strict") ? false : "explain";
         }
+        // Filter encodes UTF-8 as HTML entities (FILTER_FLAG_ENCODE_HIGH). 
+        // If sth. else did the same with (part of) the string then everything
+        // is decoded below which leaves us with the right php string. 
         $query = filter_input(INPUT_GET, 'query', FILTER_UNSAFE_RAW, FILTER_FLAG_ENCODE_LOW | FILTER_FLAG_ENCODE_HIGH);
         if (isset($query)) {
-            $this->query = html_entity_decode_numeric(trim($query));
+            $this->query = utf8_decode(html_entity_decode_numeric(trim($query)));
         } else {
             $this->query = ($sruMode == "strict") ? false : "";
         }
         $scanClause = filter_input(INPUT_GET, 'scanClause', FILTER_UNSAFE_RAW, FILTER_FLAG_ENCODE_LOW | FILTER_FLAG_ENCODE_HIGH);
         if (isset($scanClause)) {
-            $this->scanClause = html_entity_decode_numeric(trim($scanClause));
+            $this->scanClause = utf8_decode(html_entity_decode_numeric(trim($scanClause)));
         } else {
             $this->scanClause = ($sruMode == "strict") ? false : "";
         }
@@ -598,3 +601,20 @@ function getParamsAndSetUpHeader($mode = "lax") {
         header("content-type: text/xml");
     }
 }
+/**
+ * Reverse to parse_url
+ * @param array $parsed_url
+ * @return string
+ */
+function unparse_url($parsed_url) {
+  $scheme   = isset($parsed_url['scheme']) ? $parsed_url['scheme'] . '://' : '';
+  $host     = isset($parsed_url['host']) ? $parsed_url['host'] : '';
+  $port     = isset($parsed_url['port']) ? ':' . $parsed_url['port'] : '';
+  $user     = isset($parsed_url['user']) ? $parsed_url['user'] : '';
+  $pass     = isset($parsed_url['pass']) ? ':' . $parsed_url['pass']  : '';
+  $pass     = ($user || $pass) ? "$pass@" : '';
+  $path     = isset($parsed_url['path']) ? $parsed_url['path'] : '';
+  $query    = isset($parsed_url['query']) ? '?' . $parsed_url['query'] : '';
+  $fragment = isset($parsed_url['fragment']) ? '#' . $parsed_url['fragment'] : '';
+  return "$scheme$user$pass$host$port$path$query$fragment";
+} 
