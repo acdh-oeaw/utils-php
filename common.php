@@ -371,7 +371,6 @@ class SRUParameters {
         } else {
             $proc->setParameter('', 'operation', 'explain');
         }
-        $proc->setParameter('', 'x-context', $this->xcontext);
         $proc->setParameter('', 'startRecord', $this->startRecord);
         $proc->setParameter('', 'maximumRecords', $this->maximumRecords);
         $proc->setParameter('', 'scanClause', $this->scanClause);
@@ -487,6 +486,12 @@ class SRUWithFCSParameters extends SRUParameters {
                 diagnostics(6, "operation: '$this->operation'");
                 break;
         }
+    }
+    
+    public function passParametersToXSLTProcessor($proc) {
+        parent::passParametersToXSLTProcessor($proc);
+        $proc->setParameter('', 'x-dataview', $this->xdataview);
+        $proc->setParameter('', 'x-context', $this->xcontext);         
     }
 
 }
