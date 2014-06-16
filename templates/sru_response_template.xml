@@ -45,7 +45,10 @@
                                     </fcs:DataView>
                                 </tmpl_if>                               
                                 <fcs:DataView type="full">
-                                    {tmpl_var name='content'}
+<!-- Please note that it is necessary for white space preserving XSLT to have the TEI
+indented exactly as the author put it into the database. Therefore the indentation
+is not used for the content variable. (e. g. egXML) -->
+{tmpl_var name='content'}
                                 </fcs:DataView>
                             </fcs:ResourceFragment>
                         </fcs:Resource>
