@@ -505,7 +505,7 @@ class SRUWithFCSParameters extends SRUParameters {
  */
 $sru_fcs_params;
 
-define("ENT_HTML401", 0);
+// only 5.3: define("ENT_HTML401", 0);
 
 /**
  * Decodes all HTML entities, including numeric and hexadecimal ones.
