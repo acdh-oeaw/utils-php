@@ -267,7 +267,7 @@ class SRUParameters {
         }
     }
 
-    private $url;
+    protected $url;
 
     /**
      * Concats $url with the given $paramName and $paramValue
@@ -276,8 +276,8 @@ class SRUParameters {
      * @param string paramName A parameter name to be added.
      * @param string paramValue A parameter value to be added.
      */
-    private function addParamToUrl($paramName, $paramValue) {
-        $this->url . ($this->url == "?" ? "" : "&") . "$paramName=$paramValue";
+    protected function addParamToUrl($paramName, $paramValue) {
+       $this->url = $this->url . ($this->url == "?" ? "" : "&") . "$paramName=$paramValue";
     }
 
     /**
@@ -288,7 +288,7 @@ class SRUParameters {
      * @param string paramName A parameter name to be added.
      * @param string paramValue A parameter value to be added.
      */
-    private function addParamToUrlIfNotEmpty($paramName, $paramValue) {
+    protected function addParamToUrlIfNotEmpty($paramName, $paramValue) {
         if (($paramValue !== false) && ($paramValue != "")) {
             $this->addParamToUrl($paramName, $paramValue);
         }
@@ -395,7 +395,7 @@ class SRUWithFCSParameters extends SRUParameters {
      * {@link http://www.clarin.eu/cmdi}
      * @type string
      */
-    public $xcontext;
+    public $xcontext = "";
 
     /**
      * The x-format parameter passed by the client
@@ -469,13 +469,12 @@ class SRUWithFCSParameters extends SRUParameters {
      */
     public function getQueryUrl($endPoint, $type = null) {
         switch ($this->operation) {
+            // Add the same things for every operation.
             case "explain":
             case "scan":
             case "searchRetrieve":
                 parent::getQueryUrl($endPoint);
-                if (($type === "fcs.resource") || ($type === "fcs")) {
-                    $this->addParamToUrl($this->url, "x-context", $this->xcontext);
-                }
+                $this->addParamToUrl("x-context", $this->xcontext);
                 $this->addParamToUrlIfNotEmpty("x-dataview", $this->xdataview);
                 if (stripos($this->xformat, "html") === false) {
                     $this->addParamToUrlIfNotEmpty("x-format", $this->xformat);
