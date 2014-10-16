@@ -17,12 +17,12 @@ namespace ACDH\FCSSRU;
 /**
  * Configuration options
  */
-require_once '../utils-php/config.php';
+require_once __DIR__ . '/../utils-php/config.php';
 
 /**
  * Diagnostic messages
  */
-require_once '../utils-php/diagnostics.php';
+require_once __DIR__ . '/../utils-php/diagnostics.php';
 
 /**
  * vLib templating engine
@@ -587,7 +587,7 @@ function utf8_character2html_decimal_numeric($string) {
  * switch uses the strict mode.  
  * @uses $sru_fcs_params
  */
-function getParamsAndSetUpHeader($mode = "lax") {
+function  getParamsAndSetUpHeader($mode = "lax") {
     global $sru_fcs_params;
 
     $sru_fcs_params = new SRUWithFCSParameters($mode);
