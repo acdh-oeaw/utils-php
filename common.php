@@ -208,6 +208,8 @@ class SRUParameters {
         $query = filter_input(INPUT_GET, 'query', FILTER_UNSAFE_RAW, FILTER_FLAG_ENCODE_LOW | FILTER_FLAG_ENCODE_HIGH);
         if (isset($query)) {
             $this->query = utf8_decode(html_entity_decode_numeric(trim($query)));
+            // TODO: what's this for ???
+            $this->query = str_replace("|", "#", $this->query);
         } else {
             $this->query = ($sruMode == "strict") ? false : "";
         }
@@ -244,6 +246,14 @@ class SRUParameters {
         $recordPacking = filter_input(INPUT_GET, 'recordPacking', FILTER_UNSAFE_RAW, FILTER_FLAG_ENCODE_LOW | FILTER_FLAG_ENCODE_HIGH);
         if (isset($recordPacking)) {
             $this->recordPacking = trim($recordPacking);
+
+            if ($this->recordPacking === "") {
+                $this->recordPacking = "xml";
+            }
+            // TODO: why ... ???
+            if ($this->recordPacking !== "xml") {
+                $this->recordPacking = "raw";
+            }
         }
         $recordSchema = filter_input(INPUT_GET, 'recordSchema', FILTER_UNSAFE_RAW, FILTER_FLAG_ENCODE_LOW | FILTER_FLAG_ENCODE_HIGH);
         if (isset($recordSchema)) {
@@ -637,15 +647,6 @@ function  getParamsAndSetUpHeader($mode = "lax") {
     global $sru_fcs_params;
 
     $sru_fcs_params = new SRUWithFCSParameters($mode);
-// TODO: what's this for ???
-    $sru_fcs_params->query = str_replace("|", "#", $sru_fcs_params->query);
-    if ($sru_fcs_params->recordPacking === "") {
-        $sru_fcs_params->recordPacking = "xml";
-    }
-// TODO: why ... ???
-    if ($sru_fcs_params->recordPacking !== "xml") {
-        $sru_fcs_params->recordPacking = "raw";
-    }
 
     if ($sru_fcs_params->recordPacking === "xml") {
         header("content-type: text/xml");
