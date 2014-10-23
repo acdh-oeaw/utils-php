@@ -15,6 +15,13 @@
   include_once __DIR__ . '/../utils-php/config.php';
   
   use clausvb\vlib\vlibTemplate;
+  
+class SRUDiagnostics {
+    public function getAsXML(){
+        return $this->xml;
+    }
+    
+    private $xml;
 
   /**
    * Array containing all SRU diagnostic message texts
@@ -22,7 +29,7 @@
    * Using this array error numbers can be mapped to (english) messages.
    * @global array $errorMessages
    */
-  $errorMessages = array (// General Diagnostics
+   private $errorMessages = array (// General Diagnostics
                           1   => "General system error",
                           2   => "System temporarily unavailable",
                           3   => "Authentication error",
@@ -128,7 +135,7 @@
    * @param $diagnosticId
    * @param $diagnosticDetails
    */
-  function diagnostics($diagnosticId, $diagnosticDetails)
+  public function __construct($diagnosticId, $diagnosticDetails)
   {
     global $diagnosticsTemplate;
     global $version;
@@ -148,5 +155,11 @@
     $tmpl->setvar('diagnosticMessage', $diagnosticMessage);
     $tmpl->setvar('diagnosticDetails', $diagnosticDetails);
 
-    $tmpl->pparse();
+    $this->xml = $tmpl->grab();
   }
+}
+
+function diagnostics($diagnosticId, $diagnosticDetails) {
+    $diag = new SRUDiagnostics($diagnosticId, $diagnosticDetails);
+    print $diag->getAsXML();
+}
