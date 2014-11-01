@@ -17,12 +17,12 @@ namespace ACDH\FCSSRU;
 /**
  * Configuration options
  */
-require_once __DIR__ . '/../utils-php/config.php';
+require_once __DIR__ . '/config.php';
 
 /**
  * Diagnostic messages
  */
-require_once __DIR__ . '/../utils-php/diagnostics.php';
+require_once __DIR__ . '/diagnostics.php';
 
 /**
  * vLib templating engine
