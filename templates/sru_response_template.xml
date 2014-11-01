@@ -63,4 +63,9 @@ is not used for the content variable. (e. g. egXML) -->
         </tmpl_if>
     </sru:records>
     <sru:res>{tmpl_var name='res'}</sru:res>
+    <tmpl_if name='wantDiag' op='==' value='true'>
+        <div xmlns="http://www.w3.org/1999/xhtml" class="diagnostics">
+            {tmpl_var name='errorsString'} 
+        </div>
+    </tmpl_if>
 </sru:searchRetrieveResponse>

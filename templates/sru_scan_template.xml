@@ -29,4 +29,9 @@
         </tmpl_if>
         <sru:maximumTerms>{tmpl_var name='maximumTerms'}</sru:maximumTerms>
     </sru:echoedScanRequest>
+    <tmpl_if name='wantDiag' op='==' value='true'>
+        <div xmlns="http://www.w3.org/1999/xhtml" class="diagnostics">
+            {tmpl_var name='errorsString'} 
+        </div>
+    </tmpl_if>
 </sru:scanResponse>
