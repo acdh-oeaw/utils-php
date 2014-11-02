@@ -381,7 +381,6 @@ class SRUParameters {
      * @param XsltProcessor $proc The processor the parameters should be passed to
      */
     public function passParametersToXSLTProcessor($proc) {
-        $proc->setParameter('', 'format', $this->xformat);
         if (isset($this->operation) && ($this->operation !== false)) {
             $proc->setParameter('', 'operation', $this->operation);
         } else {
@@ -399,18 +398,22 @@ class SRUParameters {
      * Get all the used Xslt parameters and return them as an array.
      * 
      * @param \XsltProcessor $proc
+     * @param array $paramList
      * @return array
      */
-    public function getParameterForXSLTProcessor($proc) {
-        $ret = array(
-           'format' => '',
-           'operation' => '',
-           'startRecord' => '',
-           'maximumRecords' => '',
-           'scanClause' => '',
-           'q' => '',
-           'XDEBUG_SESSION_START' => '',
-           );
+    public function getParameterForXSLTProcessor($proc, $paramList = null) {
+        if (isset($paramList)) {
+            $ret = array_flip($paramList);
+        } else {
+            $ret = array(
+                'operation' => '',
+                'startRecord' => '',
+                'maximumRecords' => '',
+                'scanClause' => '',
+                'q' => '',
+                'XDEBUG_SESSION_START' => '',
+            );
+        }
         foreach ($ret as $param => $value) {
             $ret[$param] = $proc->getParameter('', $param);
         }
@@ -528,25 +531,24 @@ class SRUWithFCSParameters extends SRUParameters {
     
     public function passParametersToXSLTProcessor($proc) {
         parent::passParametersToXSLTProcessor($proc);
+        $proc->setParameter('', 'format', $this->xformat);
         $proc->setParameter('', 'x-dataview', $this->xdataview);
         $proc->setParameter('', 'x-context', $this->xcontext);
         $this->xsltParameters = $this->getParameterForXSLTProcessor($proc);
-    }
+        }
     /**
      * Get all the used Xslt parameters and return them as an array.
      * 
      * @param \XsltProcessor $proc
      * @return array
      */
-    public function getParameterForXSLTProcessor($proc) {
-        $ret = array(
-           'x-dataview' => '',
-           'x-context' => '',
-           );
-        foreach ($ret as $param => $value) {
-            $ret[$param] = $proc->getParameter('', $param);
+    public function getParameterForXSLTProcessor($proc, $paramList = null) {
+        if (!isset($paramList)) {
+            $paramList = array();
         }
-        $ret = array_merge($ret, parent::getParameterForXSLTProcessor($proc));
+        $paramList = array_merge($paramList, array('x-dataview', 'x-context', 'format'),
+                    array_keys(parent::getParameterForXSLTProcessor($proc)));
+        $ret = parent::getParameterForXSLTProcessor($proc, $paramList);
         return $ret;
     }    
 }
