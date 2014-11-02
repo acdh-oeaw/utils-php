@@ -166,6 +166,8 @@
    * @global string $switchUrl
    */
   $switchUrl =               "http://" . $localhost . "/" . $csRoot ."/modules/fcs-aggregator/switch.php";
+  $switchSiteName =          "corpus_shell example repository";
+  $switchSiteLogo =          "http://" . $localhost . "/" . $csRoot ."/scripts/style/logo_c_s.png";
   // phpdoc only accepts relative URLS within the local project or fully specified ones.
   /**
    * Web location of corpus_shells JavaScript and CSS scripts as seen from the browsers perspective.
