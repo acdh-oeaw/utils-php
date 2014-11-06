@@ -124,6 +124,7 @@ class EpiCurl
       $innerSleepInt = $outerSleepInt = 1;
       while($this->running && ($this->execStatus == CURLM_OK || $this->execStatus == CURLM_CALL_MULTI_PERFORM))
       {
+        $this->curlMultiExec();
         usleep($outerSleepInt);
         $outerSleepInt *= $this->sleepIncrement;
         $ms=curl_multi_select($this->mc);
@@ -131,14 +132,8 @@ class EpiCurl
            usleep(100);
            $ms=curl_multi_select($this->mc);
         }
-        if($ms >= 0)
-        {
-          do{
-            $this->execStatus = curl_multi_exec($this->mc, $this->running);
-            usleep($innerSleepInt);
-            $innerSleepInt *= $this->sleepIncrement;
-          }while($this->execStatus==CURLM_CALL_MULTI_PERFORM);
-          $innerSleepInt = 1;
+        if($ms >= 0) {
+            $this->curlMultiExec();
         }
         $this->storeResponses();
         if(isset($this->responses[$key]['data']))
@@ -152,6 +147,14 @@ class EpiCurl
     return false;
   }
   
+  private function curlMultiExec() {
+        $innerSleepInt = 1;
+        do{
+            $this->execStatus = curl_multi_exec($this->mc, $this->running);
+            usleep($innerSleepInt);
+            $innerSleepInt *= $this->sleepIncrement;
+        }while($this->execStatus==CURLM_CALL_MULTI_PERFORM);
+  }
   /**
    * Clear all responses, that is free up the memory.
    */
