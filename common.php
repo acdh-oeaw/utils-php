@@ -323,7 +323,6 @@ class SRUParameters {
      * @uses $xformat
      * @uses $xdataview
      * @param string $endPoint The (upstream) endpoint for the query URL
-     * @param string $xcontext The x-context for the query URL
      * @param string type If "fcs.resource" or "fcs" x-context is used else ignored.
      * @return string A URL string that can be used to execute the query.
      */
@@ -338,7 +337,9 @@ class SRUParameters {
         $this->addParamToUrlIfNotEmpty("stylesheet", $this->stylesheet);
         $this->addParamToUrlIfNotEmpty("extraRequestData", $this->extraRequestData);
         //pass on XDEBUG_SESSION_START
-        $this->addParamToUrlIfNotEmpty("XDEBUG_SESSION_START", $this->xdebugSessionStart);
+        if ($type !== 'ske') {
+            $this->addParamToUrlIfNotEmpty("XDEBUG_SESSION_START", $this->xdebugSessionStart);
+        }
 
         switch ($this->operation) {
             case "explain":
@@ -505,7 +506,6 @@ class SRUWithFCSParameters extends SRUParameters {
      * @uses $xformat
      * @uses $xdataview
      * @param string $endPoint The (upstream) endpoint for the query URL
-     * @param string $xcontext The x-context for the query URL
      * @param string type If "fcs.resource" or "fcs" x-context is used else ignored.
      * @return string A URL string that can be used to execute the query.
      */
@@ -515,11 +515,13 @@ class SRUWithFCSParameters extends SRUParameters {
             case "explain":
             case "scan":
             case "searchRetrieve":
-                parent::getQueryUrl($endPoint);
-                $this->addParamToUrl("x-context", $this->xcontext);
-                $this->addParamToUrlIfNotEmpty("x-dataview", $this->xdataview);
-                if (stripos($this->xformat, "html") === false) {
-                    $this->addParamToUrlIfNotEmpty("x-format", $this->xformat);
+                parent::getQueryUrl($endPoint, $type);
+                if ($type !== 'ske') {
+                    $this->addParamToUrl("x-context", $this->xcontext);
+                    $this->addParamToUrlIfNotEmpty("x-dataview", $this->xdataview);
+                    if (stripos($this->xformat, "html") === false) {
+                        $this->addParamToUrlIfNotEmpty("x-format", $this->xformat);
+                    }
                 }
                 return $endPoint . $this->url;
             default:
