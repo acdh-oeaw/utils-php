@@ -287,7 +287,7 @@ class SRUParameters {
      * @param string paramValue A parameter value to be added.
      */
     protected function addParamToUrl($paramName, $paramValue) {
-       $this->url = $this->url . ($this->url == "?" ? "" : "&") . "$paramName=$paramValue";
+        $this->url = $this->url . ($this->url == "?" ? "" : "&") . "$paramName=". urlencode($paramValue);
     }
 
     /**
@@ -338,7 +338,8 @@ class SRUParameters {
         $this->addParamToUrlIfNotEmpty("extraRequestData", $this->extraRequestData);
         //pass on XDEBUG_SESSION_START
         if ($type !== 'ske') {
-            $this->addParamToUrlIfNotEmpty("XDEBUG_SESSION_START", $this->xdebugSessionStart);
+//            $this->addParamToUrlIfNotEmpty("XDEBUG_SESSION_START", $this->xdebugSessionStart);
+//            $this->addParamToUrlIfNotEmpty("XDEBUG_SESSION_START", 'netbeans-xdebug');
         }
 
         switch ($this->operation) {
