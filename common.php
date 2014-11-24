@@ -468,6 +468,13 @@ class SRUWithFCSParameters extends SRUParameters {
      * @type array
      */
     public $context = "";
+    
+    /**
+     * In CQL/SRU 2.0 there is a queryType parameter. We will use this as a switch
+     * to pass a query in e. g. Corpus QL to the endpoints if they support that
+     */
+    
+    public $queryType = "";
 
     /**
      * Creates a new container class for FCS and SRU parameters
@@ -497,6 +504,10 @@ class SRUWithFCSParameters extends SRUParameters {
         if (isset($xdataview)) {
             $this->xdataview = trim($xdataview);
         }
+        $queryType = filter_input(INPUT_GET, 'queryType', FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
+        if (isset($xdataview)) {
+            $this->queryType = trim($queryType) === 'native' ? 'native' : '';
+        }
         $this->context = explode(",", $this->xcontext);
     }
 
@@ -517,9 +528,14 @@ class SRUWithFCSParameters extends SRUParameters {
             case "scan":
             case "searchRetrieve":
                 parent::getQueryUrl($endPoint, $type);
+                if ($this->operation === 'searchRetrieve') {
+                    $this->addParamToUrlIfNotEmpty("queryType", $this->queryType);
+                }
                 if ($type !== 'ske') {
                     $this->addParamToUrl("x-context", $this->xcontext);
-                    $this->addParamToUrlIfNotEmpty("x-dataview", $this->xdataview);
+                    if ($this->operation === 'searchRetrieve') {
+                        $this->addParamToUrlIfNotEmpty("x-dataview", $this->xdataview);
+                    }
                     if (stripos($this->xformat, "html") === false) {
                         $this->addParamToUrlIfNotEmpty("x-format", $this->xformat);
                     }
@@ -535,6 +551,7 @@ class SRUWithFCSParameters extends SRUParameters {
     public function passParametersToXSLTProcessor($proc) {
         parent::passParametersToXSLTProcessor($proc);
         $proc->setParameter('', 'format', $this->xformat);
+        $proc->setParameter('', 'queryType', $this->queryType);
         $proc->setParameter('', 'x-dataview', $this->xdataview);
         $proc->setParameter('', 'x-context', $this->xcontext);
         $this->xsltParameters = $this->getParameterForXSLTProcessor($proc);
@@ -549,7 +566,7 @@ class SRUWithFCSParameters extends SRUParameters {
         if (!isset($paramList)) {
             $paramList = array();
         }
-        $paramList = array_merge($paramList, array('x-dataview', 'x-context', 'format'),
+        $paramList = array_merge($paramList, array('x-dataview', 'x-context', 'format', 'queryType'),
                     array_keys(parent::getParameterForXSLTProcessor($proc)));
         $ret = parent::getParameterForXSLTProcessor($proc, $paramList);
         return $ret;
