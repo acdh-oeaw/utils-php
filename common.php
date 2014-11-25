@@ -505,7 +505,7 @@ class SRUWithFCSParameters extends SRUParameters {
             $this->xdataview = trim($xdataview);
         }
         $queryType = filter_input(INPUT_GET, 'queryType', FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
-        if (isset($xdataview)) {
+        if (isset($queryType)) {
             $this->queryType = trim($queryType) === 'native' ? 'native' : '';
         }
         $this->context = explode(",", $this->xcontext);
