@@ -19,21 +19,30 @@ class IndentDomDocument extends \DomDocument {
     public function xmlIndent() {
         // Retrieve all text nodes using XPath
         $x = new \DOMXPath($this);
-        $nodeList = $x->query("//text()");
+        $nodeList = $x->query("//text()[not(ancestor-or-self::*/@xml:space = 'preserve')]");
         foreach($nodeList as $node) {
             // 1. "Trim" each text node by removing its leading and trailing spaces and newlines.
             $node->nodeValue = preg_replace("/^[\s\r\n]+/", "", $node->nodeValue);
             $node->nodeValue = preg_replace("/[\s\r\n]+$/", "", $node->nodeValue);
             // 2. Resulting text node may have become "empty" (zero length nodeValue) after trim. If so, remove it from the dom.
-            if(strlen($node->nodeValue) == 0) $node->parentNode->removeChild($node);
+            if(strlen($node->nodeValue) == 0) { $node->parentNode->removeChild($node); }
         }
         // 3. Starting from root (documentElement), recursively indent each node. 
         $this->xmlIndentRecursive($this->documentElement, 0);
     } // end function xmlIndent
 
+    /**
+     * @param \DomElement $currentNode
+     * @param int $depth
+     * @return boolean
+     */
     private function xmlIndentRecursive($currentNode, $depth) {
         $indentCurrent = true;
-        if(($currentNode->nodeType == XML_TEXT_NODE) && ($currentNode->parentNode->childNodes->length == 1)) {
+        if(($currentNode instanceof \DOMElement) && ($currentNode->getAttributeNS('http://www.w3.org/XML/1998/namespace', 'space') === 'preserve')) {
+            $indentCurrent = true;
+            return $indentCurrent;
+        }
+        if(($currentNode->nodeType == XML_TEXT_NODE) && ($currentNode->parentNode->childNodes->length === 1)) {
             // A text node being the unique child of its parent will not be indented.
             // In this special case, we must tell the parent node not to indent its closing tag.
             $indentCurrent = false;
@@ -47,7 +56,7 @@ class IndentDomDocument extends \DomDocument {
         }
         if($currentNode->childNodes) {
             $indentClosingTag = false;
-            foreach($currentNode->childNodes as $childNode) $indentClosingTag = $this->xmlIndentRecursive($childNode, $depth+1);
+            foreach($currentNode->childNodes as $childNode) { $indentClosingTag = $this->xmlIndentRecursive($childNode, $depth+1); }
             if($indentClosingTag) {
                 // If children have been indented, then the closing tag
                 // of the current node must also be indented.
