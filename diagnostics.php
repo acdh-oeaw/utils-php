@@ -148,14 +148,18 @@ class SRUDiagnostics {
 
 //  header should be set elsewhere! 
 //    header ("content-type: text/xml; charset=UTF-8");
+    ErrorOrWarningException::$code_has_known_errors = true;
     $tmpl = new vlibTemplate($diagnosticsTemplate);
+    ErrorOrWarningException::$code_has_known_errors = false;
 
     $tmpl->setvar('version', $version);
     $tmpl->setvar('diagnosticId', $diagnosticId);
     $tmpl->setvar('diagnosticMessage', $diagnosticMessage);
     $tmpl->setvar('diagnosticDetails', $diagnosticDetails);
-
+    
+    ErrorOrWarningException::$code_has_known_errors = true;
     $this->xml = $tmpl->grab();
+    ErrorOrWarningException::$code_has_known_errors = false;
   }
 }
 

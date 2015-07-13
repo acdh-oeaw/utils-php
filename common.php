@@ -691,3 +691,38 @@ function unparse_url($parsed_url) {
   $fragment = isset($parsed_url['fragment']) ? '#' . $parsed_url['fragment'] : '';
   return "$scheme$user$pass$host$port$path$query$fragment";
 } 
+
+class ErrorOrWarningException extends \Exception
+{
+    protected $_Context = null;
+    public function getContext()
+    {
+        return $this->_Context;
+    }
+    public function setContext( $value )
+    {
+        $this->_Context = $value;
+    }
+
+    public function __construct( $code, $message, $file, $line, $context )
+    {
+        parent::__construct( $message, $code );
+
+        $this->file = $file;
+        $this->line = $line;
+        $this->setContext( $context );
+    }
+    
+    public static $code_has_known_errors = false;
+}
+
+/**
+ * Inspire to write perfect code. everything is an exception, even minor warnings.
+ **/
+function error_to_exception( $code, $message,  $file, $line, $context )
+{
+    if (!ErrorOrWarningException::$code_has_known_errors) {
+      throw new ErrorOrWarningException( $code, $message, $file, $line, $context );
+    }
+}
+set_error_handler( 'ACDH\FCSSRU\error_to_exception' );
