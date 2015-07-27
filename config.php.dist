@@ -15,7 +15,7 @@
    * FIXME: Why does this need to be writen down here?
    * @global string $docRoot
    */
-  $docRoot =                 '/srv/www/htdocs/';
+  $docRoot =                 '/var/www/html/';
   
   /**
    * corpus_shell's directory (or path) on the web server
@@ -43,10 +43,10 @@
    * repository.
    * @global string $dbConfigFile
    */
-  $dbConfigFile =            $docRoot . 'sru/dbconfig.php';
+  $dbConfigFile =            $docRoot . '../sru/dbconfig.php';
   
   //ACDH's corpus3
-  $corpus3Root =             "http://corpus3.aac.ac.at/cs2/corpus_shell/modules/";
+  $corpus3Root =             "https://minerva.arz.oeaw.ac.at/cs2/corpus_shell/modules/";
   
   //template files
   /**
@@ -150,13 +150,18 @@
    * by the loopback device for functions requesting data using URLs.
    * @global string $localhost
    */
-  $localhost =               "www.example.org";
+  if (isset($_SERVER['SERVER_NAME'])) {
+      $localhost =               $_SERVER['SERVER_NAME'];
+  } else {
+      $localhost =				'www.example.org';
+  }
+
   /**
    * Web location of the corpus_shell HTML application
    * 
    * @global string $webRoot
    */
-  $webRoot =                 "http://" . $localhost . "/" . $csRoot;
+  $webRoot =                 "//" . $localhost . "/" . $csRoot;
   /**
    * Web location of the switch
    * 
@@ -165,9 +170,9 @@
    * retrieval like HTML snippets used by corpus_shell's AJAX
    * @global string $switchUrl
    */
-  $switchUrl =               "http://" . $localhost . "/" . $csRoot ."/modules/fcs-aggregator/switch.php";
+  $switchUrl =               "//" . $localhost . "/" . $csRoot ."/modules/fcs-aggregator/switch.php";
   $switchSiteName =          "corpus_shell example repository";
-  $switchSiteLogo =          "http://" . $localhost . "/" . $csRoot ."/scripts/style/logo_c_s.png";
+  $switchSiteLogo =          "//" . $localhost . "/" . $csRoot ."/scripts/style/logo_c_s.png";
   // phpdoc only accepts relative URLS within the local project or fully specified ones.
   /**
    * Web location of corpus_shells JavaScript and CSS scripts as seen from the browsers perspective.
