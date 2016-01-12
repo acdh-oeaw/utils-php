@@ -38,6 +38,9 @@ class IndentDomDocument extends \DomDocument {
      */
     private function xmlIndentRecursive($currentNode, $depth) {
         $indentCurrent = true;
+        if (!is_object($currentNode)) {
+            return false;
+        }
         if(($currentNode instanceof \DOMElement) && ($currentNode->getAttributeNS('http://www.w3.org/XML/1998/namespace', 'space') === 'preserve')) {
             $indentCurrent = true;
             return $indentCurrent;

@@ -600,7 +600,7 @@ function html_entity_decode_numeric($string, $flags = NULL, $charset = "UTF-8") 
     }
     $namedEntitiesDecoded = html_entity_decode($string, $flags, $charset);
     $hexEntitiesDecoded = preg_replace_callback('~&#x([0-9a-fA-F]+);~i', "\\ACDH\\FCSSRU\\chr_utf8_callback_hex", $namedEntitiesDecoded);
-    $decimalEntitiesDecoded = preg_replace('~&#([0-9]+);~', '\\ACDH\\FCSSRU\\chr_utf8_callback', $hexEntitiesDecoded);
+    $decimalEntitiesDecoded = preg_replace_callback('~&#([0-9]+);~', '\\ACDH\\FCSSRU\\chr_utf8_callback', $hexEntitiesDecoded);
     return $decimalEntitiesDecoded;
 }
 
