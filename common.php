@@ -599,16 +599,20 @@ function html_entity_decode_numeric($string, $flags = NULL, $charset = "UTF-8") 
         $flags = (ENT_COMPAT | ENT_HTML401);
     }
     $namedEntitiesDecoded = html_entity_decode($string, $flags, $charset);
-    $hexEntitiesDecoded = preg_replace_callback('~&#x([0-9a-fA-F]+);~i', "\\ACDH\\FCSSRU\\chr_utf8_callback", $namedEntitiesDecoded);
-    $decimalEntitiesDecoded = preg_replace('~&#([0-9]+);~e', '\\ACDH\\FCSSRU\\chr_utf8("\\1")', $hexEntitiesDecoded);
+    $hexEntitiesDecoded = preg_replace_callback('~&#x([0-9a-fA-F]+);~i', "\\ACDH\\FCSSRU\\chr_utf8_callback_hex", $namedEntitiesDecoded);
+    $decimalEntitiesDecoded = preg_replace('~&#([0-9]+);~', '\\ACDH\\FCSSRU\\chr_utf8_callback', $hexEntitiesDecoded);
     return $decimalEntitiesDecoded;
 }
 
 /**
  * Callback helper 
  */
-function chr_utf8_callback($matches) {
+function chr_utf8_callback_hex($matches) {
     return chr_utf8(hexdec($matches[1]));
+}
+
+function chr_utf8_callback($matches) {
+    return chr_utf8($matches[1]);
 }
 
 /**
