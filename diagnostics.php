@@ -22,8 +22,18 @@ class SRUDiagnostics {
     }
     
     private $xml;
+    private $diagnosticId;
+    private $diagnosticDetails;
+    
+    public function getDiagnosticId() {
+        return $this->diagnosticId;
+    }
+    
+    public function getDiagnosticDetails() {
+        return $this->diagnosticDetails;
+    }
 
-  /**
+    /**
    * Array containing all SRU diagnostic message texts
    * 
    * Using this array error numbers can be mapped to (english) messages.
@@ -141,7 +151,9 @@ class SRUDiagnostics {
     global $version;
     global $vlibPath;
 
-    global $errorMessages; 
+    global $errorMessages;
+    $this->diagnosticId = $diagnosticId;
+    $this->diagnosticDetails = $diagnosticDetails;
     $diagnosticMessage = $errorMessages[$diagnosticId];
 
     require_once $vlibPath;
