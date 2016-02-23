@@ -175,6 +175,19 @@ class SRUDiagnostics {
   }
 }
 
+class ESRUDiagnostics extends \Exception {
+    private $aDiagnostics;
+    
+    public function __construct(SRUDiagnostics $sru_diagnostics, \Exception $previous = null) {
+        parent::__construct($sru_diagnostics->getDiagnosticDetails(), $sru_diagnostics->getDiagnosticId(), $previous);
+        $this->aDiagnostics = $sru_diagnostics;
+    }
+    
+    public function getSRUDiagnostics() {
+        return $this->aDiagnostics;
+    }
+}
+
 function diagnostics($diagnosticId, $diagnosticDetails) {
     $diag = new SRUDiagnostics($diagnosticId, $diagnosticDetails);
     print $diag->getAsXML();
