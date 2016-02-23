@@ -24,7 +24,7 @@
     <sru:echoedScanRequest>
         <sru:version>1.2</sru:version>
         <sru:scanClause>{tmpl_var name='clause'}</sru:scanClause>
-        <tmpl_if name='responsePosition' op='>' value='0'>
+        <tmpl_if name='responsePosition' op='>=' value='0'>
             <sru:responsePosition>{tmpl_var name='responsePosition'}</sru:responsePosition>
         </tmpl_if>
         <sru:maximumTerms>{tmpl_var name='maximumTerms'}</sru:maximumTerms>

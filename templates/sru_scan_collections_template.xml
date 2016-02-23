@@ -1,22 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sru:scanResponse xmlns:sru="http://www.loc.gov/zing/srw/"
-          xmlns:diag="http://www.loc.gov/zing/srw/diagnostic/"
-         >
+                  xmlns:diag="http://www.loc.gov/zing/srw/diagnostic/"
+                  xmlns:fcs="http://clarin.eu/fcs/1.0">
 <sru:version>{tmpl_var name='version'}</sru:version>
   <sru:terms>
     <tmpl_loop name='collection'>
         <sru:term>
               <sru:value>{tmpl_var name='name'}</sru:value>
-              <sru:numberOfRecords>1+</sru:numberOfRecords>
-              <sru:displayTerm>{tmpl_var name='label'}</sru:displayTerm>    
+              <sru:numberOfRecords>1</sru:numberOfRecords>
+              <sru:displayTerm>{tmpl_var name='label'}</sru:displayTerm>
+              <sru:extraTermData>
+                  <fcs:position>{tmpl_var name='position'}</fcs:position>
+              </sru:extraTermData>    
         </sru:term>
     </tmpl_loop>   
   </sru:terms>
+  <sru:extraResponseData>
+    <fcs:countTerms>{tmpl_var name='count'}</fcs:countTerms>
+  </sru:extraResponseData>
   <sru:echoedScanRequest>
     <sru:version>1.2</sru:version>
     <sru:scanClause>fcs.resource</sru:scanClause>
-    <sru:responsePosition></sru:responsePosition>
-    <sru:maximumTerms>1</sru:maximumTerms>
+    <tmpl_if name='responsePosition' op='>=' value='0'>
+        <sru:responsePosition>{tmpl_var name='responsePosition'}</sru:responsePosition>
+    </tmpl_if>
+    <sru:maximumTerms>{tmpl_var name='maximumTerms'}</sru:maximumTerms>
   </sru:echoedScanRequest>
 
 </sru:scanResponse>
