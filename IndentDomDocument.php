@@ -2,6 +2,11 @@
 
 namespace ACDH\FCSSRU;
 
+\mb_internal_encoding('UTF-8');
+\mb_http_output('UTF-8');
+\mb_http_input('UTF-8');
+\mb_regex_encoding('UTF-8');
+
 // idea from http://stackoverflow.com/questions/746238/indentation-with-domdocument-in-php
 
 class IndentDomDocument extends \DomDocument {
@@ -25,7 +30,7 @@ class IndentDomDocument extends \DomDocument {
             $node->nodeValue = preg_replace("/^[\s\r\n]+/", "", $node->nodeValue);
             $node->nodeValue = preg_replace("/[\s\r\n]+$/", "", $node->nodeValue);
             // 2. Resulting text node may have become "empty" (zero length nodeValue) after trim. If so, remove it from the dom.
-            if(strlen($node->nodeValue) == 0) { $node->parentNode->removeChild($node); }
+            if(mb_strlen($node->nodeValue) == 0) { $node->parentNode->removeChild($node); }
         }
         // 3. Starting from root (documentElement), recursively indent each node. 
         $this->xmlIndentRecursive($this->documentElement, 0);

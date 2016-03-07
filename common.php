@@ -14,6 +14,11 @@
 
 namespace ACDH\FCSSRU;
 
+\mb_internal_encoding('UTF-8');
+\mb_http_output('UTF-8');
+\mb_http_input('UTF-8');
+\mb_regex_encoding('UTF-8'); 
+
 /**
  * Configuration options
  */
@@ -675,7 +680,7 @@ function  getParamsAndSetUpHeader($mode = "lax") {
     $sru_fcs_params = new SRUWithFCSParameters($mode);
 
     if ($sru_fcs_params->recordPacking === "xml") {
-        header("content-type: text/xml");
+        header("content-type: text/xml; charset=UTF-8");
     }
 }
 /**
