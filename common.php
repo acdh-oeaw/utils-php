@@ -22,7 +22,7 @@ namespace ACDH\FCSSRU;
 /**
  * Configuration options
  */
-if (!include $_SERVER['DOCUMENT_ROOT'] . '/../config/config.php' ) {
+if (!@include_once $_SERVER['DOCUMENT_ROOT'] . '/../config/config.php' ) {
 	require_once __DIR__ . '/config.php';
 };
 
