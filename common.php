@@ -419,6 +419,7 @@ class SRUParameters {
                 'startRecord' => '',
                 'maximumRecords' => '',
                 'scanClause' => '',
+                'x-context' => '',
                 'q' => '',
                 'XDEBUG_SESSION_START' => '',
             );
