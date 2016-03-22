@@ -483,6 +483,14 @@ class SRUWithFCSParameters extends SRUParameters {
      */
     
     public $queryType = "";
+    
+    /**
+     * In some cases the switch is called using localhost on behalf of some script
+     * Then the real hostname needs to be supplied to the XSL transforms instead
+     * of localhost
+     */
+    
+    public $xrealhostname = "";
 
     /**
      * Creates a new container class for FCS and SRU parameters
@@ -517,6 +525,10 @@ class SRUWithFCSParameters extends SRUParameters {
             $this->queryType = trim($queryType) === 'native' ? 'native' : '';
         }
         $this->context = explode(",", $this->xcontext);
+        $xrealhostname = filter_input(INPUT_GET, 'x-realhostname', FILTER_SANITIZE_URL);
+        if (isset($xrealhostname)) {
+            $this->xrealhostname = $xrealhostname;
+        }
     }
 
     /**
