@@ -470,6 +470,18 @@ class SRUWithFCSParameters extends SRUParameters {
     public $xdataview = "kwic,title";
 
     /**
+     * The x-filter parameter passed by the client
+     * 
+     * Used to specify a searchString the is used to filter the scan result.
+     * This is in opposite to the searchString from the scan clause that just
+     * marks the start of the listing.
+     * May use word (exact), word* (startsWith), *word (endsWith) or
+     * *word* (contains)
+     * @type string|null
+     */
+    public $xfilter;
+
+    /**
      * All contexts/resources given by the HTTP GET parameter "x-context" as array
      *
      * @uses $xcontext
@@ -519,6 +531,10 @@ class SRUWithFCSParameters extends SRUParameters {
         $xdataview = filter_input(INPUT_GET, 'x-dataview', FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
         if (isset($xdataview)) {
             $this->xdataview = trim($xdataview);
+        }
+        $xfilter = filter_input(INPUT_GET, 'x-filter', FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
+        if (isset($xfilter)) {
+            $this->xfilter = trim($xfilter);
         }
         $queryType = filter_input(INPUT_GET, 'queryType', FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
         if (isset($queryType)) {
