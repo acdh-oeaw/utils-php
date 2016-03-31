@@ -532,9 +532,9 @@ class SRUWithFCSParameters extends SRUParameters {
         if (isset($xdataview)) {
             $this->xdataview = trim($xdataview);
         }
-        $xfilter = filter_input(INPUT_GET, 'x-filter', FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
+        $xfilter = filter_input(INPUT_GET, 'x-filter',  FILTER_UNSAFE_RAW, FILTER_FLAG_ENCODE_LOW | FILTER_FLAG_ENCODE_HIGH);
         if (isset($xfilter)) {
-            $this->xfilter = trim($xfilter);
+            $this->xfilter = utf8_decode(html_entity_decode_numeric(trim($xfilter)));
         }
         $queryType = filter_input(INPUT_GET, 'queryType', FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
         if (isset($queryType)) {
