@@ -477,9 +477,9 @@ class SRUWithFCSParameters extends SRUParameters {
      * marks the start of the listing.
      * May use word (exact), word* (startsWith), *word (endsWith) or
      * *word* (contains)
-     * @type string|null
+     * @type string|false
      */
-    public $xfilter;
+    public $xfilter = false;
 
     /**
      * All contexts/resources given by the HTTP GET parameter "x-context" as array
@@ -569,6 +569,7 @@ class SRUWithFCSParameters extends SRUParameters {
                 }
                 if ($type !== 'ske') {
                     $this->addParamToUrl("x-context", $this->xcontext);
+                    $this->addParamToUrlIfNotEmpty("x-filter", $this->xfilter);
                     if ($this->operation === 'searchRetrieve') {
                         $this->addParamToUrlIfNotEmpty("x-dataview", $this->xdataview);
                     }
