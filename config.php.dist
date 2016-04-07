@@ -45,6 +45,35 @@
    */
   $dbConfigFile =            $docRoot . '../sru/dbconfig.php';
   
+  /**
+   * Whether to use a global loader PHP based function in XML processing
+   * 
+   * If you expierience long delays or errors referring to www.w3.org based
+   * documents enable this. w3.org made it on purpose very unpleasnt to always
+   * query their server.
+   * This happens most probably if you try processing whole HTML pages with
+   * XSLT.
+   * There are two ways to solve this:
+   * Have your own local catalog with these documents.
+   * Just never load them.
+   * The first solution requires installing some package on linux. (Ubuntu:
+   * w3c-dtd-xhtml). This installes everything needed into a well known default
+   * location (/etc/xml with a file catalog that links to everything else)
+   * Note that I did not succeed in enabling this on a XAMPP Windows installation.
+   * In theory you have to set a global environment variable XML_CATALOG_FILES
+   * to the location of a catalog-file that contains everything needed.
+   * The second solution inevitably will result in an error message from XSLT.
+   * This error is silenced if you enable this.
+   * @global bool $useLoaderFunc
+   */
+  $useLoaderFunc =           false;
+  
+  /**
+   * Specifies how long scan results are cached in apcu cache.
+   * @global integer $chacheScanResultForSeconds
+   */
+  $chacheScanResultForSeconds = 300;
+  
   //ACDH's corpus3
   $corpus3Root =             "https://minerva.arz.oeaw.ac.at/cs2/corpus_shell/modules/";
   
