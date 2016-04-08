@@ -346,7 +346,7 @@ class SRUParameters {
         //pass on XDEBUG_SESSION_START
         if ($type !== 'ske') {
 //            $this->addParamToUrlIfNotEmpty("XDEBUG_SESSION_START", $this->xdebugSessionStart);
-//            $this->addParamToUrlIfNotEmpty("XDEBUG_SESSION_START", 'netbeans-xdebug');
+//            $this->addParamToUrl("XDEBUG_SESSION_START", 'netbeans-xdebug');
         }
 
         switch ($this->operation) {
@@ -591,6 +591,11 @@ class SRUWithFCSParameters extends SRUParameters {
         $proc->setParameter('', 'queryType', $this->queryType);
         $proc->setParameter('', 'x-dataview', $this->xdataview);
         $proc->setParameter('', 'x-context', $this->xcontext);
+        if ($this->xrealhostname !== "") {
+            $proc->setParameter('', 'site_url', $this->xrealhostname);
+        } else {
+            $proc->setParameter('', 'site_url', (isset($_SERVER['HTTPS']) ? 'https://':'http://').$_SERVER['SERVER_NAME']);
+        }
         $this->xsltParameters = $this->getParameterForXSLTProcessor($proc);
         }
     /**
@@ -603,7 +608,7 @@ class SRUWithFCSParameters extends SRUParameters {
         if (!isset($paramList)) {
             $paramList = array();
         }
-        $paramList = array_merge($paramList, array('x-dataview', 'x-context', 'format', 'queryType'),
+        $paramList = array_merge($paramList, array('x-dataview', 'x-context', 'format', 'queryType', 'site_url'),
                     array_keys(parent::getParameterForXSLTProcessor($proc)));
         $ret = parent::getParameterForXSLTProcessor($proc, $paramList);
         return $ret;
