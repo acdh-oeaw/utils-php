@@ -503,6 +503,13 @@ class SRUWithFCSParameters extends SRUParameters {
      */
     
     public $xrealhostname = "";
+       
+    /**
+     * A comma separated list of languages the user knows so the output
+     * can be generated accordingly
+     */
+    
+    public $xuserlangs = "";
 
     /**
      * Creates a new container class for FCS and SRU parameters
@@ -544,6 +551,10 @@ class SRUWithFCSParameters extends SRUParameters {
         $xrealhostname = filter_input(INPUT_GET, 'x-realhostname', FILTER_SANITIZE_URL);
         if (isset($xrealhostname)) {
             $this->xrealhostname = $xrealhostname;
+        }
+        $xuserlangs = filter_input(INPUT_GET, 'x-userlangs', FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
+        if (isset($xuserlangs)) {
+            $this->xuserlangs  = trim($xuserlangs);
         }
     }
 
@@ -595,7 +606,10 @@ class SRUWithFCSParameters extends SRUParameters {
             $proc->setParameter('', 'site_url', $this->xrealhostname);
         } else {
             $proc->setParameter('', 'site_url', (isset($_SERVER['HTTPS']) ? 'https://':'http://').$_SERVER['SERVER_NAME']);
-        }
+        }        
+        if ($this->xuserlangs !== "") {
+            $proc->setParameter('', 'user_langs', $this->xuserlangs);
+        } 
         $this->xsltParameters = $this->getParameterForXSLTProcessor($proc);
         }
     /**
@@ -608,7 +622,7 @@ class SRUWithFCSParameters extends SRUParameters {
         if (!isset($paramList)) {
             $paramList = array();
         }
-        $paramList = array_merge($paramList, array('x-dataview', 'x-context', 'format', 'queryType', 'site_url'),
+        $paramList = array_merge($paramList, array('x-dataview', 'x-context', 'format', 'queryType', 'site_url', 'user_langs'),
                     array_keys(parent::getParameterForXSLTProcessor($proc)));
         $ret = parent::getParameterForXSLTProcessor($proc, $paramList);
         return $ret;
