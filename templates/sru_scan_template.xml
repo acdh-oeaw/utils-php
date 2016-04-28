@@ -28,6 +28,8 @@
             <sru:responsePosition>{tmpl_var name='responsePosition'}</sru:responsePosition>
         </tmpl_if>
         <sru:maximumTerms>{tmpl_var name='maximumTerms'}</sru:maximumTerms>
+        <fcs:x-context>{tmpl_var name='xcontext'}</fcs:x-context>
+        <fcs:x-filter>{tmpl_var name='xfilter'}</fcs:x-filter>
     </sru:echoedScanRequest>
     <tmpl_if name='wantDiag' op='==' value='true'>
         <div xmlns="http://www.w3.org/1999/xhtml" class="diagnostics">
