@@ -783,16 +783,17 @@ function prefered_languages ($http_accept_language="auto") {
     
     $ret = array();
     $qvalues = array();
-    
+       
+    $qvalue = 1.0;
     foreach ($hits as $hit) {
         if (empty($hit['lang'])) {continue;}
         // read data from the array of this hit
-        array_push($ret, $hit['lang']);
-        $qvalue = 1.0; 
+        array_push($ret, $hit['lang']); 
         if (!empty($hit['qvalue'])) {
             $qvalue = floatval($hit['qvalue']); 
         }
         $qvalues[$hit['lang']] = $qvalue;
+        $qvalue *= 0.999;
     } 
     
     usort($ret, function($a, $b) use ($qvalues) {
