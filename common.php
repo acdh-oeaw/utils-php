@@ -554,7 +554,9 @@ class SRUWithFCSParameters extends SRUParameters {
         }
         $xuserlangs = filter_input(INPUT_GET, 'x-userlangs', FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
         if (isset($xuserlangs)) {
-            $this->xuserlangs  = trim($xuserlangs);
+            $this->xuserlangs  = join(',', prefered_languages(trim($xuserlangs)));
+        } else {
+            $this->xuserlangs = join(',', prefered_languages());
         }
     }
 
@@ -751,6 +753,55 @@ function unparse_url($parsed_url) {
   $fragment = isset($parsed_url['fragment']) ? '#' . $parsed_url['fragment'] : '';
   return "$scheme$user$pass$host$port$path$query$fragment";
 } 
+
+/** 
+ * determine which language out of an available set the user prefers most
+ * from: http://stackoverflow.com/a/6038460
+ *
+ * @param string $available_languages array with language-tag-strings (must be lowercase) that are available 
+ * @param string $http_accept_language a HTTP_ACCEPT_LANGUAGE string (read from $_SERVER['HTTP_ACCEPT_LANGUAGE'] if left out)
+ * @return array preferred languages as weighted array 
+ */ 
+function prefered_languages ($http_accept_language="auto") { 
+    // if $http_accept_language was left out, read it from the HTTP-Header 
+    if ($http_accept_language == "auto") {
+        $http_accept_language = filter_input(INPUT_SERVER, 'HTTP_ACCEPT_LANGUAGE', FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
+    }
+    
+    $hits = array();
+    // standard  for HTTP_ACCEPT_LANGUAGE is defined under 
+    // http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4 
+    // pattern to find is therefore something like this: 
+    //    1#( language-range [ ";" "q" "=" qvalue ] ) 
+    // where: 
+    //    language-range  = ( ( 1*8ALPHA *( "-" 1*8ALPHA ) ) | "*" ) 
+    //    qvalue         = ( "0" [ "." 0*3DIGIT ] ) 
+    //            | ( "1" [ "." 0*3("0") ] ) 
+    preg_match_all('~(?<lang>(?<mainlang>[[:alpha:]]{1,8})-?(?<sublang>[[:alpha:]|-]{1,8}))?' . 
+                   '(\s*;\s*q\s*=\s*(?<qvalue>1\.0{0,3}|0\.\d{0,3}))?\s*(,|$)~i', 
+                   $http_accept_language, $hits, PREG_SET_ORDER);  
+    
+    $ret = array();
+    $qvalues = array();
+    
+    foreach ($hits as $hit) {
+        if (empty($hit['lang'])) {continue;}
+        // read data from the array of this hit
+        array_push($ret, $hit['lang']);
+        $qvalue = 1.0; 
+        if (!empty($hit['qvalue'])) {
+            $qvalue = floatval($hit['qvalue']); 
+        }
+        $qvalues[$hit['lang']] = $qvalue;
+    } 
+    
+    usort($ret, function($a, $b) use ($qvalues) {
+        if ($qvalues[$a] > $qvalues[$b]) {return -1;}
+        elseif ($qvalues[$a] === $qvalues[$b]) {return 0;}
+        else {return 1;}
+    });
+    return $ret; 
+}
 
 class ErrorOrWarningException extends \Exception
 {
