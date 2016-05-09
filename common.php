@@ -63,6 +63,14 @@ class SRUParameters {
      * @type string|bool
      */
     public $query = "";
+    
+    /**
+     * Contains the individiual parts of either the query or the scanClause
+     * 
+     * Has keys index, operator and searchString
+     * @type array 
+     */
+    public $queryParts = array();
 
     /**
      * The index to be browsed and the start point within it, expressed as a complete index, relation, term clause in CQL
@@ -217,12 +225,14 @@ class SRUParameters {
             $this->query = utf8_decode(html_entity_decode_numeric(trim($query)));
             // TODO: what's this for ???
             $this->query = str_replace("|", "#", $this->query);
+            $this->queryParts = $this->findCQLParts();
         } else {
             $this->query = ($sruMode == "strict") ? false : "";
         }
         $scanClause = filter_input(INPUT_GET, 'scanClause', FILTER_UNSAFE_RAW, FILTER_FLAG_ENCODE_LOW | FILTER_FLAG_ENCODE_HIGH);
         if (isset($scanClause)) {
             $this->scanClause = utf8_decode(html_entity_decode_numeric(trim($scanClause)));
+            $this->queryParts = $this->findCQLParts();
         } else {
             $this->scanClause = ($sruMode == "strict") ? false : "";
         }
@@ -310,7 +320,29 @@ class SRUParameters {
             $this->addParamToUrl($paramName, $paramValue);
         }
     }
-
+    
+    /**
+    * Tries to find the index, operator and searchString (start string for scan) in
+    * either the query parameter or the scanClause parameter.
+    * @return array An array that has all the groups found by preg_match. The
+    *               index, operator and searchString found are contained as 
+    *               key value pairs.
+    */
+    protected function findCQLParts() {
+        $cqlIdentifier = '("([^"])*")|([^\s()=<>"\/]*)';
+        $matches = array();
+        $regexp = '/(?<index>'.$cqlIdentifier.') *(?<operator>(==?)|(>=?)|(<=?)|('.$cqlIdentifier.')) *(?<searchString>'.$cqlIdentifier.')/';
+        preg_match($regexp, $this->query !== '' ? $this->query : $this->scanClause, $matches);
+        $matches['index'] = trim($matches['index'], '"');
+        $matches['operator'] = trim($matches['operator'], '"');
+        $matches['searchString'] = trim($matches['searchString'], '"');
+        if ($matches['searchString'] === '') {
+            $matches['searchString'] = $matches['index'];
+            $matches['index'] = '';
+        }
+        return $matches;
+    }
+    
     /**
      * Generates the query url including all mandatory and optional params
      * 
