@@ -62,7 +62,14 @@ class SRUParameters {
      * If $sruMode is "strict" this is set to false if the paramter is missing else it's assumed to be ""
      * @type string|bool
      */
-    public $query = "";
+    private $query = "";
+    public function getQuery() {
+        return $this->query;
+    }
+    public function setQuery($query) {
+        $this->query = $query;
+        $this->queryParts = $this->findCQLParts();
+    }
     
     /**
      * Contains the individiual parts of either the query or the scanClause
@@ -431,6 +438,11 @@ class SRUParameters {
         $proc->setParameter('', 'maximumRecords', $this->maximumRecords);
         $proc->setParameter('', 'scanClause', $this->scanClause);
         $proc->setParameter('', 'q', $this->query);
+        if (isset($this->queryParts['index'])) {
+            $proc->setParameter('', 'index', $this->queryParts['index']);        
+            $proc->setParameter('', 'operator', $this->queryParts['operator']);
+            $proc->setParameter('', 'searchString', $this->queryParts['searchString']);
+        }
         $proc->setParameter('', 'XDEBUG_SESSION_START', $this->xdebugSessionStart);
         $this->xsltParameters = $this->getParameterForXSLTProcessor($proc);
     }
@@ -453,6 +465,9 @@ class SRUParameters {
                 'scanClause' => '',
                 'x-context' => '',
                 'q' => '',
+                'index' => '',
+                'operator' => '',
+                'searchString' => '',
                 'XDEBUG_SESSION_START' => '',
             );
         }
