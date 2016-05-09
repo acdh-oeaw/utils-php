@@ -343,7 +343,7 @@ class SRUParameters {
         $matches['index'] = trim($matches['index'], '"');
         $matches['operator'] = trim($matches['operator'], '"');
         $matches['searchString'] = trim($matches['searchString'], '"');
-        if ($matches['searchString'] === '') {
+        if ($this->operation !== 'scan' && $matches['searchString'] === '') {
             $matches['searchString'] = $matches['index'];
             $matches['index'] = '';
         }
