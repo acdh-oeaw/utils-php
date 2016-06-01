@@ -46,7 +46,6 @@ class SRUDiagnostics {
                           6   => "Unsupported parameter value",
                           7   => "Mandatory parameter not supplied",
                           8   => "Unsupported Parameter",
-                          235 => "Database does not exist",
                           // Diagnostics Relating to CQL
                           10  => "Query syntax error",
                           // Deprecated
@@ -73,7 +72,7 @@ class SRUDiagnostics {
                           33  => "Combination of proximity/adjacency and masking characters not supported",
                           34  => "Combination of proximity/adjacency and anchoring characters not supported",
                           35  => "Term contains only stopwords",
-                          36  => "Term in invalid format for index or relation",
+                          36  => "Term has invalid format for index or relation",
                           37  => "Unsupported boolean operator",
                           38  => "Too many boolean operators in query",
                           39  => "Proximity not supported",
@@ -127,7 +126,8 @@ class SRUDiagnostics {
                           111 => "Unsupported stylesheet",
                           // Diagnostics relating to Scan
                           120 => "Response position out of range",
-                          121 => "Too many terms requested");
+                          121 => "Too many terms requested",
+                          235 => "Database does not exist");
   
   
   /**
@@ -149,10 +149,9 @@ class SRUDiagnostics {
     global $version;
     global $vlibPath;
 
-    global $errorMessages;
     $this->diagnosticId = $diagnosticId;
     $this->diagnosticDetails = $diagnosticDetails;
-    $diagnosticMessage = $errorMessages[$diagnosticId];
+    $diagnosticMessage = $this->errorMessages[$diagnosticId];
 
     require_once $vlibPath;
 
