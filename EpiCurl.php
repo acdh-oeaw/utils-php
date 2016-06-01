@@ -1,4 +1,5 @@
 <?php
+
 /* This class is part of the epiphany framework which is licensed as follows:
  * 
  * Copyright (c) 2007, Jaisen Mathai
