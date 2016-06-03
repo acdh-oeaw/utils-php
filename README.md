@@ -40,6 +40,8 @@ Depends on [vLIB](https://github.com/acdh-oeaw/vLIB). See the umbrella project [
 
 ## 3rd Party Software used
 
-Uses vLIB which is distributed under the Artistic License 2.0.
-Uses EpiCurl which is is part of the epiphany framework. This is licensed using
+* Uses vLIB which is distributed under the Artistic License 2.0.
+* Uses EpiCurl which is is part of the [epiphany framework](https://github.com/jmathai/epiphany). This is licensed using
 The BSD 3-Clause License.
+
+## More docs
