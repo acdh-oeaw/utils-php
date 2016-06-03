@@ -28,6 +28,14 @@ corresponding XML snippet easiely
 
 ## Other Files
 
+### The configuration file template
+
+This component as well as other project depending on this one use global variables that are described in [config.php.dist](https://github.com/acdh-oeaw/utils-php/blob/master/config.php.dist)
+Note that the now recommended way of configuring all projects is putting a config.php in a directory config
+which is _not part_ of the document root. This adds a little security.
+
+### XML response templates 
+
 This project contains the [templates](https://github.com/acdh-oeaw/utils-php/tree/master/templates)
 for vLIB that other parts use as the framework to deliver mostly FCS/SRU 1.2 compliant responses.
 There is a [Tutorial and Examples document in German](http://vlib.clausvb.de/docs/vlib_einfuehrung.pdf)
@@ -45,3 +53,5 @@ Depends on [vLIB](https://github.com/acdh-oeaw/vLIB). See the umbrella project [
 The BSD 3-Clause License.
 
 ## More docs
+
+* [TODO](https://github.com/acdh-oeaw/utils-php/blob/master/docs/TODO.md)
