@@ -3,3 +3,5 @@
 * This component should be described using [composer](https://getcomposer.org) and then imported using it.
 * This component should use [composer](https://getcomposer.org) to fetch its dependencies
 * This component relies on global variables for configuration. They should be replaced with something better suited
+* There should be PHPUnit tests
+* Files are to long they should be split up
