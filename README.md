@@ -12,7 +12,7 @@ protocol.
 
 ### URL parmeter parsers and URL generators
 
-These classes provide three things:
+[These classes](https://github.com/acdh-oeaw/utils-php/blob/master/common.php) provide three things:
 * Parsing of query parameters specified in FCS/SRU and our own enhancements
 ** Also privides sane defaults for most parameters
 * Generating a query string from the parameters stored or parsed
