@@ -1,0 +1,5 @@
+# Things that need to be done to make this project future proof
+
+* This component should be described using [composer](https://getcomposer.org) and then imported using it.
+* This component should use [composer](https://getcomposer.org) to fetch its dependencies
+* This component relies on global variables for configuration. They should be replaced with something better suited
