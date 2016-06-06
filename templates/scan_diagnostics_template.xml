@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<TMPL_IF NAME="False">
 <!--
 The MIT License
 
@@ -23,7 +23,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -->
-
+</TMPL_IF>
 <sru:scanResponse xmlns:sru="http://www.loc.gov/zing/srw/" >
     <sru:version>{tmpl_var name='version'}</sru:version>
     <sru:diagnostics>

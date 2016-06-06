@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<TMPL_IF NAME="False">
 <!--
 The MIT License
 
@@ -23,7 +23,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -->
-
+</TMPL_IF>
 <diagnostic xmlns="http://www.loc.gov/zing/srw/diagnostic/">
     <uri>info:srw/diagnostic/1/{tmpl_var name='diagnosticId'}</uri>
     <message>{tmpl_var name='diagnosticMessage'}</message>
