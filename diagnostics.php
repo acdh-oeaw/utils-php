@@ -210,7 +210,11 @@ class ESRUDiagnostics extends \Exception {
     }
 }
 
-function diagnostics($diagnosticId, $diagnosticDetails) {
-    $diag = new SRUDiagnostics($diagnosticId, $diagnosticDetails);
+function diagnostics($diagnosticIdOrObj, $diagnosticDetails = '') {
+    if ($diagnosticIdOrObj instanceof SRUDiagnostics) {
+        $diag = $diagnosticIdOrObj;
+    } else {
+        $diag = new SRUDiagnostics($diagnosticIdOrObj, $diagnosticDetails);
+    }
     print $diag->getAsXML();
 }
