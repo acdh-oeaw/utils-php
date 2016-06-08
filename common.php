@@ -363,7 +363,8 @@ class SRUParameters {
         $cqlIdentifier = '("([^"])*")|([^\s()=<>"\/]*)';
         $matches = array();
         $regexp = '/(?<index>'.$cqlIdentifier.') *(?<operator>(==?)|(>=?)|(<=?)|('.$cqlIdentifier.')) *(?<searchString>'.$cqlIdentifier.')/';
-        preg_match($regexp, $this->query !== '' ? $this->query : $this->scanClause, $matches);
+        $clause = ($this->query !== false && $this->query !== '') ? $this->query : $this->scanClause;
+        preg_match($regexp, $clause, $matches);
         $matches['index'] = trim($matches['index'], '"');
         $matches['operator'] = trim($matches['operator'], '"');
         $matches['searchString'] = trim($matches['searchString'], '"');
@@ -471,6 +472,8 @@ class SRUParameters {
         $this->xsltParameters = $this->getParameterForXSLTProcessor($proc);
     }
     
+    protected $paramList = array();
+
     /**
      * Get all the used Xslt parameters and return them as an array.
      * 
@@ -495,6 +498,8 @@ class SRUParameters {
                 'XDEBUG_SESSION_START' => '',
             );
         }
+        $ret = array_merge($this->paramList, $ret);
+        $this->paramList = $ret;
         foreach ($ret as $param => $value) {
             $ret[$param] = $proc->getParameter('', $param);
         }
