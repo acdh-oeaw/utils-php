@@ -122,10 +122,10 @@ class SRUParameters {
      * even if the number of terms returned is less than the number requested.
      * The range of values is 0 to the number of terms requested plus 1. The default value is 1.<br/>
      * Optional.<br/>
-     * Passed as HTTP GET parameter "responsePosition". If the parameter is missing "" is assumed.
-     * @type integer|string
+     * Passed as HTTP GET parameter "responsePosition". If the parameter is missing 1 is assumed.
+     * @type integer
      */
-    public $responsePosition = "";
+    public $responsePosition = 1;
 
     /**
      * The number of terms which the client requests be returned
@@ -271,7 +271,7 @@ class SRUParameters {
         if (isset($responsePosition)) {
             $this->responsePosition = $responsePosition;
         } else {
-            $this->responsePosition = "";
+            $this->responsePosition = 1;
         }
         $maximumTerms = filter_input(INPUT_GET, 'maximumTerms', FILTER_VALIDATE_INT);
         if (isset($maximumTerms)) {
