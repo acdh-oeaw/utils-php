@@ -556,6 +556,17 @@ class SRUWithFCSParameters extends SRUParameters {
      * @type string|false
      */
     public $xfilter = false;
+    
+    /**
+     * The x-mode parameter passed by the client
+     * 
+     * Used to determine if the list used for generating the scan result
+     * that may be expensive to generate should be refreshed.
+     * Only valid value is refresh
+     * @type string|false
+     */
+    
+    public $xmode = false;
 
     /**
      * All contexts/resources given by the HTTP GET parameter "x-context" as array
@@ -618,6 +629,10 @@ class SRUWithFCSParameters extends SRUParameters {
         $xfilter = filter_input(INPUT_GET, 'x-filter',  FILTER_UNSAFE_RAW, FILTER_FLAG_ENCODE_LOW | FILTER_FLAG_ENCODE_HIGH);
         if (isset($xfilter)) {
             $this->xfilter = utf8_decode(html_entity_decode_numeric(trim($xfilter)));
+        }
+        $xmode = filter_input(INPUT_GET, 'x-mode',  FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
+        if (isset($xmode)) {
+            $this->xmode = trim($xmode) === 'refresh' ? 'refresh' : false;
         }
         $queryType = filter_input(INPUT_GET, 'queryType', FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW | FILTER_FLAG_STRIP_HIGH);
         if (isset($queryType)) {
