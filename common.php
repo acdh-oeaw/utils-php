@@ -661,19 +661,23 @@ class SRUWithFCSParameters extends SRUParameters {
      * @param string type If "fcs.resource" or "fcs" x-context is used else ignored.
      * @return string A URL string that can be used to execute the query.
      */
-    public function getQueryUrl($endPoint, $type = null) {
+    public function getQueryUrl($endPoint, $type = null) {        
+        parent::getQueryUrl($endPoint, $type);
         switch ($this->operation) {
             // Add the same things for every operation.
             case "explain":
             case "scan":
+                if ($type !== 'ske') {
+                    $this->addParamToUrlIfNotEmpty('x-mode', $this->xmode);
+                    $this->addParamToUrlIfNotEmpty("x-filter", $this->xfilter);
+                }
+                // plus the following
             case "searchRetrieve":
-                parent::getQueryUrl($endPoint, $type);
                 if ($this->operation === 'searchRetrieve') {
                     $this->addParamToUrlIfNotEmpty("queryType", $this->queryType);
                 }
                 if ($type !== 'ske') {
                     $this->addParamToUrl("x-context", $this->xcontext);
-                    $this->addParamToUrlIfNotEmpty("x-filter", $this->xfilter);
                     if ($this->operation === 'searchRetrieve') {
                         $this->addParamToUrlIfNotEmpty("x-dataview", $this->xdataview);
                     }
