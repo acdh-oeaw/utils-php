@@ -347,7 +347,7 @@ class SRUParameters {
      * @param string paramValue A parameter value to be added.
      */
     protected function addParamToUrlIfNotEmpty($paramName, $paramValue) {
-        if (($paramValue !== false) && ($paramValue != "")) {
+        if (($paramValue !== false) && ($paramValue !== "")) {
             $this->addParamToUrl($paramName, $paramValue);
         }
     }
